@@ -4,28 +4,28 @@ function getInstructions(level,pms,wPtr)
 % % (practice, begining, end). If level is 1 then it provides the detailed
 % % instructions for the task, if level is 2 the actual task starts, level 3
 % % informs about the end of practice and level 4 about the end of the
-% % memory task. 
-% % 
+% % memory task.
+% %
 % SYNTAX
-% 
+%
 % GETINSTRUCTIONS(level,pms,wPtr)
 % level:    phase of the experiment we need instructions for (1: begin practice, 2: begin task, 3: end practice, 4: end task)
 % pms:      parameteres defined in main script. Here we use parameters pms.yCenter (middle of y axis of screen), pms.textColor (color of text)and pms.wrapAt (where to wrap the text).
 % wPtr:     monitor (given as output in main script by PTB function  [wPtr,rect]=Screen('Openwindow',max(Screen('Screens')));)
-% 
-% 
+%
+%
 
 %Hide mouse during instructions
 HideCursor;
 
-%% Text for level 1. Every cell is a different screen. 
- 
+%% Text for level 1. Every cell is a different screen.
+
 if level == 1
     
-    Instruction{1} = 'Welcome to our experiment.\n You can walk through the instructions by using any key of the keyboard.\n Press a key to start...';
-    Instruction{2} = 'The first part is a memory task.\n Every trial of the task consists of 3 phases.';
+    Instruction{1} = 'Welcome to our experiment.\n You can walk through the instructions by using the left and right arrow keys.\n Press right arrow to start...';
+    Instruction{2} = 'The first part is a memory task.\n Every trial of the task consists of 3 phases.First, you will have to memorize colors and locations. Then, you see new colors that you might need to memorize. Finally you are tested on our colorwheel!';
     Instruction{3} =sprintf('Phase 1: you will see a colored square on the screen.\n The square will be shown for %d seconds.',pms.encDuration);
-    Instruction{4} = 'You need to memorize the color and the location of the square.';
+    Instruction{4} = 'You always need to memorize the color and the location of the square.';
     imgEnc=imread('Encoding.png');
     imageEnc=Screen('MakeTexture',wPtr,imgEnc);
     Instruction{5}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 1: memorize color and location.';
@@ -41,9 +41,9 @@ if level == 1
     Instruction{11} = sprintf('Phase 3: you see a colorwheel and the frame of a square without color.\n Within %d seconds you need to indicate with a mouse click on the wheel, which color you needed to remember.',pms.maxRT);
     imgProbe=importdata('Probe.png');
     imageProbe=Screen('MakeTexture',wPtr,imgProbe);
-    Instruction{12}='Click on the correct color!';
-    Instruction{13}='Only your first response counts. Please try to respond always, even if you are not certain, and try to be as accurate and fast as possible.';
-    Instruction{14}='Please try to always look at the fixation cross while doing the task.';
+    Instruction{12}='Click on the correct color!\n (Not now, this is an example!)';
+    Instruction{13}='Only your first response counts. Please try to respond always, even if you are not certain, and try to be as accurate and fast as possible.Keep your hand on the mouse so that you have enough time to respond.';
+    Instruction{14}='Please try to always look at the screen while doing the task.';
     Instruction{15} ='Summary: \n\n Phase 1:\n You always remember the color and location of the square.\n\n Phase 2:\n If the letter in the centre is I:\n you IGNORE the new color in phase 2.\n If the letter in the centre is U:\n you UPDATE your memory with ONLY the new square.\n\n Phase 3: On the colorwheel you indicate which color you needed to remember.';
     Instruction{16} = 'We start with one square being presented at a time, but increase it up to 4.\n When multiple colors are presented, try to memorize all colors and the according locations.\n\n';
     Instruction{17}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 1 with 4 colors';
@@ -52,7 +52,7 @@ if level == 1
     Instruction{18}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 2 with 4 colors';
     imgUpdate4=importdata('Update4.png');
     imageUpdate4=Screen('MakeTexture',wPtr,imgUpdate4);
-    Instruction{19}='Of all 4 colors you need to indicate \n only the color of the highlighted square.';
+    Instruction{19}='Of all 4 colors you need to indicate \n only the color of the HIGHLIGHTED square.';
     Instruction{20}='';
     imgProbe4=importdata('ProbeSZ4.png');
     imageProbe4=Screen('MakeTexture',wPtr,imgProbe4);
@@ -68,33 +68,37 @@ elseif level == 2
 elseif level ==3
     %
     Instruction{1}='End of practice!';
-    %         Instruction{2}='You will see one colored square and you simply have to name its color';
-    %         Instruction{3}='Do not think too much to reply\n\n Your answer will be presented on the screen only after you press enter';
-    %
+    
 elseif level==4
     
     Instruction{1}='This is the end of the memory task! \n\n Please contact the researchers.\n They will start the next part of the experiment.';
     
 elseif level==5
     
-            switch pms.choiceCondition
-                case 0
-                    Instruction{1}=sprintf('The selected choice is Ignore %d for %d euros.',pms.choiceSZ,pms.bonus);
-                case 2
-                    Instruction{1}=sprintf('The selected choice is Update %d for %d euros.',pms.choiceSZ,pms.bonus);
-            end
+    switch pms.choiceCondition
+        case 0
+            Instruction{1}=sprintf('The selected choice is Ignore %d for %d euros.',pms.choiceSZ,pms.bonus);
+        case 2
+            Instruction{1}=sprintf('The selected choice is Update %d for %d euros.',pms.choiceSZ,pms.bonus);
+    end
     
 elseif level==6
     Instruction{1}='This was the end of the experiment! \n\n Thank you for your participation.\n\n Please contact the researchers.';
     
 end %level
- 
-for i = 1:length(Instruction)
-                RestrictKeysForKbCheck([37,39,32,97,98])
 
+for i=1:100
+    RestrictKeysForKbCheck([37,39,40,38,32,97,98])
+    if i==1
+        back=0;
+    end
+    if counter<length(Instruction)
+        counter=counter+back;
+    end
+    
     if level==1
         % Exceptions for figures;
-        switch i
+        switch counter
             case 5
                 Screen('DrawTexture', wPtr, imageEnc)
             case 8
@@ -110,23 +114,23 @@ for i = 1:length(Instruction)
             case 20
                 Screen('DrawTexture',wPtr,imageProbe4)
         end
-        if i==12
-            DrawFormattedText(wPtr,Instruction{i},'center',pms.yCenter-90,pms.textColor,pms.wrapAt,[],[],pms.spacing);
+        if counter==12
+            DrawFormattedText(wPtr,Instruction{counter},'center',pms.yCenter-90,pms.textColor,pms.wrapAt,[],[],pms.spacing);
         else
-            DrawFormattedText(wPtr,Instruction{i},'center','center',pms.textColor,pms.wrapAt,[],[],pms.spacing);
+            DrawFormattedText(wPtr,Instruction{counter},'center','center',pms.textColor,pms.wrapAt,[],[],pms.spacing);
         end
     end %level
     
     if level==2 || level==3 || level==4 || level==5
-        DrawFormattedText(wPtr,Instruction{i},'center','center',pms.textColor,pms.wrapAt,[],[],pms.spacing);
+        DrawFormattedText(wPtr,Instruction{counter},'center','center',pms.textColor,pms.wrapAt,[],[],pms.spacing);
     end
     
     Screen('flip',wPtr);
-%         imageArray=Screen('GetImage',wPtr);
-%         r=randi(100,1);
-%         imwrite(imageArray,sprintf('InstructionColorwheel%d',r),'bmp');
+    %         imageArray=Screen('GetImage',wPtr);
+    %         r=randi(100,1);
+    %         imwrite(imageArray,sprintf('InstructionColorwheel%d',r),'bmp');
     
-    if level==1 && i==length(Instruction)
+    if level==1 && counter==length(Instruction)
         GetClicks()
     else
         KbWait();
@@ -139,67 +143,17 @@ for i = 1:length(Instruction)
         if keyIsDown==1
             WaitSecs(1);
             responded = 1;
-            if find(KeyCode)==37 && i~=1
-                if level==1
-                    switch i
-                        case 6
-                            Screen('DrawTexture', wPtr, imageEnc)
-                        case 9
-                            Screen('DrawTexture', wPtr, imageIgnore)
-                        case 11
-                            Screen('DrawTexture', wPtr, imageUpdate)
-                        case 14
-                            Screen('DrawTexture', wPtr, imageProbe)
-                        case 18
-                            Screen('DrawTexture', wPtr, imageEnc4)
-                        case 19
-                            Screen('DrawTexture', wPtr, imageUpdate4)
-                        case 21
-                            Screen('DrawTexture',wPtr,imageProbe4)
-                            
-                    end
-                    if i==14
-                        DrawFormattedText(wPtr,Instruction{i-1},'center',pms.yCenter-90,pms.textColor,pms.wrapAt,[],[],pms.spacing);
-                    else
-                        DrawFormattedText(wPtr,Instruction{i-1},'center','center',pms.textColor,pms.wrapAt,[],[],pms.spacing);
-                    end
-                    
-                    Screen('Flip',wPtr)
-                    KbStrokeWait()
-                    switch i
-                        case 5
-                            Screen('DrawTexture', wPtr, imageEnc)
-                        case 8
-                            Screen('DrawTexture', wPtr, imageIgnore)
-                        case 10
-                            Screen('DrawTexture', wPtr, imageUpdate)
-                        case 12
-                            Screen('DrawTexture', wPtr, imageProbe)
-                        case 17
-                            Screen('DrawTexture', wPtr, imageEnc4)
-                        case 18
-                            Screen('DrawTexture', wPtr, imageUpdate4)
-                        case 20
-                            Screen('DrawTexture',wPtr,imageProbe4)
-                            
-                    end
-                    if i==12
-                        DrawFormattedText(wPtr,Instruction{i},'center',pms.yCenter-90,pms.textColor,pms.wrapAt,[],[],pms.spacingt);
-                    else
-                        DrawFormattedText(wPtr,Instruction{i},'center','center',pms.textColor,pms.wrapAt,[],[],pms.spacing);
-                    end
-                    
-                    Screen('Flip',wPtr)
-                    KbStrokeWait()
-                end %level 
-            end %find keyCode
-        end %if key is down
-                        RestrictKeysForKbCheck([])
-
-    end %while responded =0
-end
-end
+            if find(KeyCode)==37 && counter~=1
+                back=-1;
+            else
+                back=1;
+            end
+            
+        end %level
+    end %find keyCode
+end %if key is down
+RestrictKeysForKbCheck([])
 %  clear Screen
 
-                             
+end
 
