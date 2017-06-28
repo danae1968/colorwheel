@@ -14,7 +14,7 @@ function [colorTestData]=colorVision(pms,wPtr,rect)
 % Screen('TextStyle',wPtr,1);
 % Screen('TextFont',wPtr,'Times New Roman');
 
-numTrials=pms.nameTrials;
+numTrials=pms.colorTrials;
 rectOne=[0 0 100 100];
 centerX=rect(3)/2;
 centerY=rect(4)/2;
@@ -22,7 +22,7 @@ ShowCursor('Arrow'); %we can change the shape of the mouse and then type ShowCur
 SetMouse(rect(3)/2,rect(4)/2,wPtr);
 testOnset=GetSecs();
 wrptx=rect(3)/4;
-message='Before we start we need to check your color sensitivity.\n\n You will see a colored square in the middle of the screen.\n\n Find the corresponding color on the colorwheel and click it!';
+message='Welcome to our memory task!\n\n\n Before we start we need to check your color sensitivity. \n\n You will see a colored square in the middle of the screen.\n\n Find the corresponding color on the colorwheel and click it!\n\n Try to be as accurate as possible, but no need to take a lot of time to respond!\n\n\n  This is not a validated color vision test, just relevant specifically for our task.\n\n Press space to start.';
 passingScore=15;
 
 DrawFormattedText(wPtr, message,'center','center',[],wrptx)
@@ -49,20 +49,22 @@ colorangle=360/length(colors);
                       if index(N)<=12
                           probePie=pie(index(N)).color;
                           namePie=pie(index(N)).name;
+                          numberPie=pie(index(N)).number;
                           probeColorCorrect=probePie(round(length(probePie)/2),:);
                           colorPosition=1;
                       elseif index(N)>12
                           probePie=pie(index(N)-12).color;
                           namePie=pie(index(N)-12).name;
+                          numberPie=pie(index(N)-12).number;
                           probeColorCorrect=probePie(1,:);
                           colorPosition=0;
                       elseif index(N)>24
                           probePie=pie(index(N)-24).color;
                           namePie=pie(index(N)-24).name;
-                          probeColorCorrect=probePie(end,:);
+                          probeColorCorrect=probePie(end,:);         
+                          numberPie=pie(index(N)-24).number;                          
                           colorPosition=2;
                       end
-
 
                       load starts.mat
                       wheelStart=starts(N);
@@ -89,8 +91,7 @@ colorangle=360/length(colors);
                             respY=y;
                             rt=secs-probeOnset;
                          end
-
-
+                         
                          WaitSecs(0.001);
 
 % clear Screen
@@ -124,7 +125,7 @@ end
       Screen('FillOval',wPtr,pms.background,insideRect);
        Screen('FillRect', wPtr, probeColorCorrect, rectOne'); 
       Screen('Flip',wPtr);
-       WaitSecs(1);
+       WaitSecs(0.5);
 
       for ind=1:length(colors)
         Screen('FillArc',wPtr,colors(ind,:),outsideRect,startangle(ind),colorangle);
@@ -144,28 +145,24 @@ end
 %                                 r=randi(1000);
 %                             imageArray=Screen('GetImage',wPtr);
 %                             imwrite(imageArray,sprintf('ColTest%dFeedback.png',r),'png');   
-         WaitSecs(1);
+         WaitSecs(0.8);
              end
       end
 
-%             Screen('TextSize',wPtr,20);
-%             DrawFormattedText(wPtr, 'How would you name the color you just saw?\n\n red,orange,yellow,light green, green, blue green, turquoise, cyan, blue, purple, pink or magenda?','center', centerY-100, [0 0 0])
-%             reply=Ask(wPtr,'Please type your response and press enter',[],[],'GetString','center','center',15);
-%             DrawFormattedText(wPtr, reply, 'center', centerY+100, [0 0 0])
-%             Screen('Flip',wPtr)
-%             WaitSecs(2)
-
          colorTestData(N).respDif=abs(respDif);  
+         colorTestData(N).respDifDirection=respDif;           
          colorTestData(N).rt=rt;
          colorTestData(N).probeColor=probeColorCorrect;
 %              colorTestData(N).colorName=reply;
          colorTestData(N).pie=probePie;
-%              colorTestData(N).pieName=namePie;
+         colorTestData(N).pieName=namePie;
+         colorTestData(N).pieNumber=numberPie;
          colorTestData(N).colorPosition=colorPosition;
+
 
                       end  %for N=1:numTrials
                       %for index=randperm(numTrials)
-                      filename=sprintf('ColorTest_s%d_pilot2.mat',pms.subNo);
+                      filename=sprintf('ColorTest_s%d.mat',pms.subNo);
 
                       if exist (filename,'file')
                             randAttach = round(rand*10000);
