@@ -187,13 +187,14 @@ try
 %     cd('M:\.matlab\GitHub\QuantifyingCC')
 %     BeautifulColorwheel(pms.subNo, pms.choiceSZ,pms.choiceCondition)
    end
-    
+    if practice==0
     clear Screen
     Screen('CloseAll');
     ShowCursor; % display mouse cursor again
     ListenChar(0); % allow keystrokes to Matlab
     Priority(0); % return Matlab's priority level to normal
     Screen('Preference','TextAlphaBlending',0);
+    end
 catch ME
     disp(getReport(ME));
     keyboard   
