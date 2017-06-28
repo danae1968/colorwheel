@@ -64,7 +64,7 @@ try
     pms.redoBlocks=1; %blocks for Redo
     pms.maxSetsize=4; %maximum number of squares used
     
-    pms.nameTrials=24; %trials for color naming task
+    pms.colorTrials=24; %trials for color naming task
     
     %colors
     pms.numWheelColors=512;
@@ -72,7 +72,7 @@ try
     %text
     pms.textColor=[0 0 0];
     pms.background=[200,200,200];
-    pms.wrapAt=60;
+    pms.wrapAt=65;
     pms.spacing=2;
     pms.textSize=22;
     pms.textFont='Times New Roman';
@@ -95,7 +95,7 @@ try
     pms.delay2DurationIgn=2;
     pms.delay2DurationUpd=6;
     pms.feedbackDuration=0.5; %feedback during colorwheel
-    pms.feedbackDurationPr=1;
+    pms.feedbackDurationPr=0.7;
     pms.jitter = 0;
     if exist('colordir','var')
         pms.colordir=colordir;
@@ -103,10 +103,6 @@ try
         pms.colordir=pwd;
     end
     %% display and screen
-    % display parameters
-    %     mon = 0; % 0 for primary monitor
-    %     pms.bkgd = 200; % intensity level of background gray
-    
     % bit Added to address problem with high precision timestamping related
     % to graphics card problems
     
@@ -211,14 +207,15 @@ try
     elseif practice==2
         getInstructions(5,pms,wPtr)
     end
-   
+    
+   if practice==0
     clear Screen
     Screen('CloseAll');
     ShowCursor; % display mouse cursor again
     ListenChar(0); % allow keystrokes to Matlab
     Priority(0); % return Matlab's priority level to normal
     Screen('Preference','TextAlphaBlending',0);
-   
+   end
 catch ME
     disp(getReport(ME));
     keyboard
