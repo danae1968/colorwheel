@@ -31,9 +31,8 @@ for trial = 1:length(data.trialNumber)
     
     save(fullfile(pms.choicedir,dataFilenamePrelim.dataFilenamePrelim))
     
-     msgMoney=double('for €');
-    msgHard = sprintf('%s%.2f',msgMoney,data.hardOffer(trial));
-    msgEasy = sprintf('%s%.2f',msgMoney,data.easyOffer(trial));
+    msgHard = double(sprintf('for €%.2f',data.hardOffer(trial)));
+    msgEasy = double(sprintf('for €%.2f',data.easyOffer(trial)));
     
     switch data.locationEasy(trial)
         case 1 %means easy option left, hard right
@@ -182,9 +181,8 @@ for trial = 1:length(data.trialNumber)
     Screen('FrameRect',wPtr,[0 0 0],rect_Center); 
     
     offerOnset = Screen('Flip',wPtr);
-    %    imageArray=Screen('GetImage',wPtr);
-    %     r=randi(100,1);
-    %     imwrite(imageArray,sprintf('newChoice%d.png',r),'png');
+%        imageArray=Screen('GetImage',wPtr);
+%         imwrite(imageArray,sprintf('newChoice%d.png',trial),'png');
     choiceOnset = offerOnset - pms.exptOnset;
     %    WaitSecs(pms.maxRT);
     WaitSecs(0.001);
@@ -193,7 +191,7 @@ for trial = 1:length(data.trialNumber)
     choiceRTAll=[];
     while (GetSecs - offerOnset) < pms.maxRT
         % check keyboard
-                RestrictKeysForKbCheck([pms.allowedResps.left, pms.allowedResps.right,37,39,32,97,98])
+        RestrictKeysForKbCheck([pms.allowedResps.left, pms.allowedResps.right,37,39,32,97,98])
         [keyIsDown, secs, keyCode] = KbCheck;
         WaitSecs(0.1);
         if keyIsDown==1
@@ -241,9 +239,8 @@ for trial = 1:length(data.trialNumber)
     Screen('FrameRect',wPtr,[0 0 0],rect_Center);
     drawFixationCross(wPtr, rect);
     Screen('Flip',wPtr,[],1);
-%         imageArray=Screen('GetImage',wPtr);
-%         r=randi(100,1);
-%         imwrite(imageArray,sprintf('ChoiceMade%d.png',r),'png');
+%                 imageArray=Screen('GetImage',wPtr);
+%                 imwrite(imageArray,sprintf('ChoiceMade%d.png',trial),'png');
 %     WaitSecs(0.5) 
         
         
@@ -285,20 +282,21 @@ for trial = 1:length(data.trialNumber)
 %         r=randi(100,1);
 %         imwrite(imageArray,sprintf('choiceMade%d',r),'bmp');
          WaitSecs(pms.iti);
-    
-    
-    %Break after every block
+        
+%Break after every block
     if trial~=length(data.block)
         if data.block(trial)-data.block(trial+1)~=0
-        if pms.practice==0
-            DrawFormattedText(wPtr,sprintf('End of block %d, press any key to continue.',data.block(trial) ),'center','center',[0 0 0]);
-            Screen('Flip',wPtr)
-            KbWait();
-            WaitSecs(2)
-        elseif pms.practice==1
-            getInstructionsChoice(2,pms,wPtr)
-        end
-        
+            if pms.practice==0
+                DrawFormattedText(wPtr,sprintf('End of block %d, press space to continue.',data.block(trial) ),'center','center',[0 0 0]);
+                Screen('Flip',wPtr)
+                RestrictKeysForKbCheck(32)
+                KbWait();
+                RestrictKeysForKbCheck([])
+                WaitSecs(2)
+            elseif pms.practice==1
+                getInstructionsChoice(2,pms,wPtr)
+            end
+            
         end
     end
 end %trial loop

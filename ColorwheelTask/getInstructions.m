@@ -86,7 +86,7 @@ elseif level==6
     Instruction{1}='This was the end of the experiment! \n\n Thank you for your participation.\n\n Please contact the researchers.';
     
 end %level
-
+counter=1;
 for i=1:100
     RestrictKeysForKbCheck([37,39,40,38,32,97,98])
     if i==1
@@ -130,10 +130,16 @@ for i=1:100
     %         r=randi(100,1);
     %         imwrite(imageArray,sprintf('InstructionColorwheel%d',r),'bmp');
     
+    
     if level==1 && counter==length(Instruction)
         GetClicks()
-    else
+        break
+    elseif counter==length(Instruction)
         KbWait();
+        break
+    else 
+        KbWait();
+        
     end
     
     %      %record the keyboard click

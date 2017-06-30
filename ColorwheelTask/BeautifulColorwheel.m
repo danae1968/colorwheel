@@ -64,7 +64,7 @@ try
     pms.redoBlocks=1; %blocks for Redo
     pms.maxSetsize=4; %maximum number of squares used
     
-    pms.colorTrials=24; %trials for color naming task
+    pms.colorTrials=4; %trials for color naming task
     
     %colors
     pms.numWheelColors=512;
