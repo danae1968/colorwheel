@@ -177,11 +177,12 @@ try
    
    elseif practice==0
        %%redo
+    getInstructionsChoice(5,pms,wPtr)   
     [choiceSZ, choiceCondition,bonus]=Redo(pms,data);
     varargout{1}=choiceSZ;
     varargout{2}=choiceCondition;
     varargout{3}=bonus;
-    getInstructionsChoice(5,pms,wPtr)     
+      
         % save data
      save(fullfile(pms.choicedir,dataFilename),'data','dataHeader','pms','bonus');
 %     cd('M:\.matlab\GitHub\QuantifyingCC')

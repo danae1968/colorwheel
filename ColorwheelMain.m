@@ -40,31 +40,33 @@ end
 % cd(rootdir)
 
 %%%%%%%Colorwheel behavioral study script%%%%%%%%%%
-chdir           = fullfile(rootdir,'ChoiceTask');
+% chdir           = fullfile(rootdir,'ChoiceTask');
+% 
+% if ~exist(logdir,'dir')
+%     mkdir(rootdir,'Log');
+% end
+% 
+% choiceDir = fullfile(logdir,'ChoiceTask');
+% if ~exist(choiceDir,'dir')
+%     mkdir(choiceDir);
+% end
+% 
+% subdirCh = fullfile(choiceDir,sprintf('Choices_sub_%d',subNo));
+% 
+% if ~exist(subdirCh,'dir')
+%     mkdir(choiceDir,sprintf('Choices_sub_%d',subNo));
+% else
+%     errordlg('Caution! Participant file name already exists!','Filename exists');
+%     return
+% end
+% 
 
-if ~exist(logdir,'dir')
-    mkdir(rootdir,'Log');
-end
+% %%% choice task
 
-choiceDir = fullfile(logdir,'ChoiceTask');
-if ~exist(choiceDir,'dir')
-    mkdir(choiceDir);
-end
+% cd(chdir)
+% BeautifulChoices(subNo,1,subdirCh);
+% BeautifulChoices(subNo,0,subdirCh);
 
-subdirCh = fullfile(choiceDir,sprintf('Choices_sub_%d',subNo));
-
-if ~exist(subdirCh,'dir')
-    mkdir(choiceDir,sprintf('Choices_sub_%d',subNo));
-else
-    errordlg('Caution! Participant file name already exists!','Filename exists');
-    return
-end
-
-
-%%% choice task
-
-cd(chdir)
-BeautifulChoices(subNo,1,subdirCh);
-BeautifulChoices(subNo,0,subdirCh);
-cd(rootdir)
-
+%%% redo
+cd(cwdir)
+BeautifulColorwheel(subNo,2,subdir,choiceSZ,choiceCondition,bonus)
