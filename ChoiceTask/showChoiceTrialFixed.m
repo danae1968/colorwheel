@@ -253,7 +253,7 @@ for trial = 1:length(data.trialNumber)
         choiceRT = 0;
         DrawFormattedText(wPtr,'Too slow!','center',ylength*(1/4));
         Screen('Flip',wPtr)
-        WaitSecs(pms.iti);
+        WaitSecs(pms.fb);
         
     end
     

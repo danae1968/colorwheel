@@ -82,9 +82,9 @@ try
     % timings
     pms.fixation = 1; %fixation before task
     pms.maxRT =6; % max RT
-    pms.iti = 0.5; %between trials
+    pms.iti = 0.3; %between trials
     pms.jitter = 0; % should trial duration be jittered (no: 0, yes: 1)
-    
+    pms.fb= 0.3;
     %text14
     pms.background=[200,200,200]; %background color
     pms.textColor=[0 0 0];
