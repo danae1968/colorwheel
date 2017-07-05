@@ -40,37 +40,37 @@ Screen('TextFont',wPtr,'Times New Roman');
 
 if level == 1
     
-    Instruction{1} = 'Welcome to the choice task. Press any key to continue.';
+    Instruction{1} = 'Welcome to the choice task!\n You can walk through the instructions by using the left and right arrow keys.\n Press right arrow to start...';
     Instruction{2} = 'During this part you can win a bonus by redoing a few more blocks of the colorwheel task. However, the difficulty of the redo and the amount of the bonus will be based on choices that you will make beforehand.';
     imgChoice=imread('ChoiceDirect.png');
     imageChoice=Screen('MakeTexture',wPtr,imgChoice);
     
-    Instruction{3}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n For example: Would you rather receive 2 euros for doing Update(U)of 4 squares or 2 euros for doing Ignore(I) of 4 squares?';
+    Instruction{3}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n For example: Would you rather receive 2 euros for doing Ignore(I) of 4 squares or 2 euros for doing Update(U) of 4 squares?';
     Instruction{4} = sprintf('To select the left option, press 1 and for the right option press 2. You have %d seconds to respond.',pms.maxRT);
     imgChoiceMade=imread('ChoiceMadeDirect.png');
     imageChoiceMade=Screen('MakeTexture',wPtr,imgChoiceMade);
-    Instruction{5}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n A square is shown to indicate that your choice has been made';
+    Instruction{5}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n A square is shown to indicate that your choice has been made';
     Instruction{6} = 'You will make many similar choices, for various amounts and number of squares.';
     Instruction{7} = 'One of these choices will be chosen randomly. The redo of the colorwheel task and the bonus will be based on this choice.';
     Instruction{8}='Press any key to start the practice of this part.\n These choices are not counting yet.';
     
 elseif level == 2
-    Instruction{1}='You will also have the opportunity to avoid doing the redo and still earn a bonus. If you choose the No Redo option, then you can use the remaining time as you please, using the computer, your phone etc.';
+    Instruction{1}='You will also have the opportunity to avoid doing the redo completely and still earn a bonus.The No Redo option means that you could use the remaining time as you please in the cubicle, using the computer, your phone etc.';
     imgChoiceNR=imread('ChoiceNoRedo.png');
     imageChoiceNR=Screen('MakeTexture',wPtr,imgChoiceNR);
-    Instruction{2}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n For example: Would you rather receive 2 euros for Ignoring 3 squares or 60 cents for not doing a redo?';
+    Instruction{2}='\n\n\n\n\n\n\n\n\n\n\n\n\n For example: Would you rather receive 2 euros for Ignoring 4 squares or 60 cents for not doing a redo?';
     Instruction{3}='Press any key to start practice for these trials';
 elseif level==3
-    Instruction{1}= 'You will make many choices of both types. One of them will be selected and you will redo one to three blocks of the colorwheel task based on that choice. 70% of all trials of the blocks you will do will consist of that choice.';
+    Instruction{1}= 'You will make many choices of both types. One of them will be selected and you will redo one to three blocks of the colorwheel task based on that choice. Each block lasts about 15min. 70% of all trials of the blocks you will do will consist of that choice.';
     Instruction{2}='The number of blocks of the redo is randomly selected by the computer.';
-    Instruction{3}= 'The amount of money of the bonus represents all blocks and not a single trial and it is extra to the agreed amount for the experiment. You will receive it if your performance during the redo is similar to your performance in the first two blocks of the colorwheel task.';
-    imgChoiceMade=imread('ChoiceMadeDirect.png');
+    Instruction{3}= 'The amount of money of the bonus represents all blocks and not a single trial and it is extra to the agreed amount for the experiment. You will receive it if your performance during the redo is similar to your performance in the first two blocks of the colorwheel task. That means that to earn the bonus you would need to put effort in doing the task, but not that you would always have to be accurate.';
+    imgChoiceMade=imread('ChoiceMadeExample1.png');
     imageChoiceMade=Screen('MakeTexture',wPtr,imgChoiceMade);
-    Instruction{4}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n For example, if this choice is selected you will do a few blocks of mostly Update 4 and you will earn 2 euros.';
+    Instruction{4}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n For example, if this choice is selected you will do a few blocks of mostly Update 1 and you will earn 2 euros.';
     imgChoiceExample=imread('ChoiceMadeExample2.png');
     imageChoiceExample=Screen('MakeTexture',wPtr,imgChoiceExample);
-    Instruction{5}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n If this choice is selected you will not have to redo the colorwheel task and you will earn 2 euros.';
-    Instruction{6}='Do not rush your answers. It is very important that you think of both the money and your experience of doing the specific trials of the task.';
+    Instruction{5}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n If this choice is selected you will not have to redo the colorwheel task and you will earn 1.40 euros.';
+    Instruction{6}='Do not rush your answers. It is very important that you think of both the money and your experience of doing the specific trials of the task (i.e. number of squares and Ignore (I) /Update (U) condition).';
     Instruction{7}='If something is not clear, do not hesitate to contact the researchers!';
     
 elseif level==4
