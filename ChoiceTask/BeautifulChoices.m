@@ -188,7 +188,7 @@ try
 %     cd('M:\.matlab\GitHub\QuantifyingCC')
 %     BeautifulColorwheel(pms.subNo, pms.choiceSZ,pms.choiceCondition)
    end
-    if practice==0
+    if practice~=1
     clear Screen
     Screen('CloseAll');
     ShowCursor; % display mouse cursor again
