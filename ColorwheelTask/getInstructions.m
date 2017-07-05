@@ -77,11 +77,11 @@ elseif level==5
     
     switch pms.choiceCondition
         case 0
-            Instruction{1}=sprintf('The selected choice is Ignore %d for %d euros.',pms.choiceSZ,pms.bonus);
+            Instruction{1}=sprintf('The selected choice is Ignore %d for %d euros. You will redo one block of the colorwheel task.',pms.choiceSZ,pms.bonus);
         case 2
-            Instruction{1}=sprintf('The selected choice is Update %d for %d euros.',pms.choiceSZ,pms.bonus);
+            Instruction{1}=sprintf('The selected choice is Update %d for %d euros. You will redo one block of the colorwheel task.',pms.choiceSZ,pms.bonus);
     end
-    
+            
 elseif level==6
     Instruction{1}='This was the end of the experiment! \n\n Thank you for your participation.\n\n Please contact the researchers.';
     

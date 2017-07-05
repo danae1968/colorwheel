@@ -64,7 +64,7 @@ try
     pms.redoBlocks=1; %blocks for Redo
     pms.maxSetsize=4; %maximum number of squares used
     
-    pms.colorTrials=4; %trials for color naming task
+    pms.colorTrials=24; %trials for color naming task
     
     %colors
     pms.numWheelColors=512;
@@ -205,7 +205,7 @@ try
     elseif practice==1
        getInstructions(3,pms,wPtr)   
     elseif practice==2
-        getInstructions(5,pms,wPtr)
+        getInstructions(6,pms,wPtr)
     end
     
    if practice==0
