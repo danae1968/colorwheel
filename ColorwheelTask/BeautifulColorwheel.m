@@ -208,7 +208,7 @@ try
         getInstructions(6,pms,wPtr)
     end
     
-   if practice==0
+   if practice~=1
     clear Screen
     Screen('CloseAll');
     ShowCursor; % display mouse cursor again
