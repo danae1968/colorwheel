@@ -121,7 +121,7 @@ for i=1:100
         end
     end %level
     
-    if level==2 || level==3 || level==4 || level==5
+    if level~=1
         DrawFormattedText(wPtr,Instruction{counter},'center','center',pms.textColor,pms.wrapAt,[],[],pms.spacing);
     end
     
