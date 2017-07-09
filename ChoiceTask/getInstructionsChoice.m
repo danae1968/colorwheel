@@ -58,7 +58,7 @@ elseif level == 2
     Instruction{1}='You will also have the opportunity to avoid doing the redo completely and still earn a bonus.The No Redo option means that you could use the remaining time as you please in the cubicle, using the computer, your phone etc.';
     imgChoiceNR=imread('ChoiceNoRedo.png');
     imageChoiceNR=Screen('MakeTexture',wPtr,imgChoiceNR);
-    Instruction{2}='\n\n\n\n\n\n\n\n\n\n\n\n\n For example: Would you rather receive 2 euros for Ignoring 4 squares or 60 cents for not doing a redo?';
+    Instruction{2}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n For example: Would you rather receive 2 euros for Ignoring 4 squares or 60 cents for not doing a redo?';
     Instruction{3}='Press any key to start practice for these trials';
 elseif level==3
     Instruction{1}= 'You will make many choices of both types. One of them will be selected and you will redo one to three blocks of the colorwheel task based on that choice. Each block lasts about 15min. 70% of all trials of the blocks you will do will consist of that choice.';
