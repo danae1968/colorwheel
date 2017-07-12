@@ -65,7 +65,7 @@ end
 
 cd(chdir)
 BeautifulChoices(subNo,1,subdirCh);
-[choiceSZ, choiceCondition, bonus]=BeautifulChoices(subNo,0,subdirCh);
+[~,choiceSZ, choiceCondition, bonus]=BeautifulChoices(subNo,0,subdirCh);
 
 %% redo
 cd(cwdir)
