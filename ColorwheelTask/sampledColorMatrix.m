@@ -65,7 +65,6 @@ end
 %     end
 % end
 
-% MF: what do you do here? Hard to get your head around :) comment
 pie.color=struct;
 K=round(stepS/2):stepS:pms.numWheelColors;
 pie(1).color=[colormatrix((pms.numWheelColors-stepS/2):pms.numWheelColors,:);colormatrix(1:stepS/2,:)];
