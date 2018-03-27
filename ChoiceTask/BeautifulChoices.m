@@ -12,7 +12,7 @@ function [data,varargout] = BeautifulChoices(varargin)
 %           but ONLY remember the latest colors/locations presented during interference phase.
 % Here we offer them two different versions of choices, in each of which
 % there is an easy and hard version of the task
-% Version 1: Task vs No task  (easy offer: task)
+% Version 1: Task vs No task  (easy offer: no task)
 % In this version participants choose between repeating all levels of the DMS task
 % and not repeating the task at all
 % Version 2: Update vs Ignore (easy offer: Update, hypothesized)
