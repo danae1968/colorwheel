@@ -20,7 +20,7 @@ if practice==0
     trialvector=[zeros(1,pms.numTrials/pms.numCondi), 22*ones(1,(pms.numTrials/pms.numCondi))];
     blockmatrix = repmat(trialvector, 1,pms.numBlocks);
     
-    setsize = [1,2,3,4]';
+    setsize = [1,4]';
     % setrepeats=numTrials/length(setsize);
     setsizevector = repmat(setsize,pms.numTrials/length(setsize),pms.numBlocks); %MF: the size of this matrix is not right.. should be numTrials*numBlocks; this is too big.
     %DP: it works now but numTrials have to be divided both by 3 and 4  %MF: true, I think with higher trial numbers it would work, but not all elements were used here; just keep an eye on this :)
