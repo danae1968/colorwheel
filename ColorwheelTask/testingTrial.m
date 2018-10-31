@@ -1,4 +1,4 @@
-function [U I I1 I2 I3 I4 U1 U2 U3 U4]=testingTrial(data)
+function [U I I1 I2 I3 I4 U1 U2 U3 U4]=testingTrial(trial)
 
 U=zeros(size(data,2),1);
 I=zeros(size(data,2),1);

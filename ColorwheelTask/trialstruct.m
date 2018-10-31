@@ -55,7 +55,7 @@ if practice==0
 elseif practice==1
     pms.numBlocks=pms.numBlocksPr;
     pms.numTrials=pms.numTrialsPr;
-    setsizevector = [ones(1,(pms.numTrials/pms.maxSetsize)), 2*ones(1,pms.numTrials/pms.maxSetsize), 3*ones(1,pms.numTrials/pms.maxSetsize),pms.maxSetsize*ones(1,pms.numTrials/pms.maxSetsize)]';
+    setsizevector = [ones(1,(pms.numTrials/pms.maxSetsize)),pms.maxSetsize*ones(1,pms.numTrials/pms.maxSetsize)]';
     setsizevectorFin=repmat(setsizevector,1,pms.numBlocks);
     %         trialTypes=[0 1 2]';
     trialTypes=[0 2]';
