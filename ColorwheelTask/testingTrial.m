@@ -1,29 +1,29 @@
 function [U I I1 I2 I3 I4 U1 U2 U3 U4]=testingTrial(trial)
 
-U=zeros(size(data,2),1);
-I=zeros(size(data,2),1);
-% UL=zeros(size(data,2),1);
-I1=zeros(size(data,2),1);
-I2=zeros(size(data,2),1);
-I3=zeros(size(data,2),1);
-I4=zeros(size(data,2),1);
-U1=zeros(size(data,2),1);
-U2=zeros(size(data,2),1);
-U3=zeros(size(data,2),1);
-U4=zeros(size(data,2),1);
-% UL1=zeros(size(data,2),1);
-% UL2=zeros(size(data,2),1);
-% UL3=zeros(size(data,2),1);
-% UL4=zeros(size(data,2),1);
+U=zeros(size(trial,2),1);
+I=zeros(size(trial,2),1);
+% UL=zeros(size(trial,2),1);
+I1=zeros(size(trial,2),1);
+I2=zeros(size(trial,2),1);
+I3=zeros(size(trial,2),1);
+I4=zeros(size(trial,2),1);
+U1=zeros(size(trial,2),1);
+U2=zeros(size(trial,2),1);
+U3=zeros(size(trial,2),1);
+U4=zeros(size(trial,2),1);
+% UL1=zeros(size(trial,2),1);
+% UL2=zeros(size(trial,2),1);
+% UL3=zeros(size(trial,2),1);
+% UL4=zeros(size(trial,2),1);
 
-for x=1:length(data)
-    for y=1:size(data,2)
+for x=1:length(trial)
+    for y=1:size(trial,2)
       
-        if data(x,y).type==2 || data(x,y).type==22
+        if trial(x,y).type==2 || trial(x,y).type==22
 
            
             U(y)=U(y)+1;
-             switch data(x,y).setsize
+             switch trial(x,y).setSize
                  case 1
                     U1(y)=U1(y)+1;
                  case 2
@@ -34,9 +34,9 @@ for x=1:length(data)
                     U4(y)=U4(y)+1;
              end
              
-        elseif data(x,y).type==0
+        elseif trial(x,y).type==0
              I(y)=I(y)+1;
-             switch data(x,y).setsize
+             switch trial(x,y).setSize
                 case 1
                     I1(y)=I1(y)+1;
                  case 2
@@ -48,10 +48,10 @@ for x=1:length(data)
              end
      
         
-%         elseif data(x,y).type==2 %|| data(x,y).type==2
+%         elseif trial(x,y).type==2 %|| trial(x,y).type==2
 %            
 %             UL(y)=UL(y)+1;
-%              switch data(x,y).setsize
+%              switch trial(x,y).setsize
 %                  case 1
 %                     UL1(y)=UL1(y)+1;
 %                  case 2
