@@ -51,7 +51,11 @@ for x=1:length(trial)
 %         elseif trial(x,y).type==2 %|| trial(x,y).type==2
 %            
 %             UL(y)=UL(y)+1;
+<<<<<<< HEAD
 %              switch trial(x,y).setsize
+=======
+%              switch trial(x,y).setSize
+>>>>>>> 6905946... rakouni
 %                  case 1
 %                     UL1(y)=UL1(y)+1;
 %                  case 2
