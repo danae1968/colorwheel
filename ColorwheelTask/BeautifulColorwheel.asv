@@ -62,9 +62,9 @@ try
     pms.numBlocksPr=1; %blocks for practice
     pms.redoTrials=24; %trials for Redo
     pms.redoBlocks=1; %blocks for Redo
-    pms.setsize=[1 3]; %maximum number of squares used
+    pms.maxSetsize=3; %maximum number of squares used
     
-    pms.colorTrials=12; %trials for color naming task
+    pms.colorTrials=24; %trials for color naming task
     
     %colors
     pms.numWheelColors=512;
