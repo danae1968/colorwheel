@@ -37,11 +37,13 @@ disp('TASK 1: Colorwheel');          % display which task starts.
 WaitSecs(2)
 
 BeautifulColorwheel(subNo,1,subdir) %practice=1
-BeautifulColorwheel(subNo,0,subdir) %practice=0
+%BeautifulColorwheel(subNo,0,subdir) %practice=0
 
 cd(rootdir)
 
 %% choice task
+runChoice=0;
+if runChoice
 chdir           = fullfile(rootdir,'ChoiceTask');
 
 if ~exist(logdir,'dir')
@@ -68,7 +70,10 @@ end
 cd(chdir)
 BeautifulChoices(subNo,1,subdirCh);
 [~,choiceSZ, choiceCondition, bonus]=BeautifulChoices(subNo,0,subdirCh);
-
+end
 %% redo of colorwheel task
+runRedo=0;
+if runRedo
 cd(cwdir)
 BeautifulColorwheel(subNo,2,subdir,choiceSZ,choiceCondition,bonus)
+end

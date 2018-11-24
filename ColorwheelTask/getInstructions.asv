@@ -47,15 +47,15 @@ if level == 1
     Instruction{15} ='Summary: \n\n Phase 1:\n You always remember the color and location of the square.\n\n Phase 2:\n If the letter in the centre is I:\n you IGNORE the new color in phase 2.\n If the letter in the centre is U:\n you UPDATE your memory with ONLY the new square.\n\n Phase 3: On the colorwheel you indicate which color you needed to remember.';
     Instruction{16} = 'We start with one square being presented at a time, but increase it to 3.\n When multiple colors are presented, try to memorize all colors and the according locations.\n\n';
     Instruction{17}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 1 with 3 colors';
-    imgEnc3=importdata('Encsz3.png');
-    imageEnc3=Screen('MakeTexture',wPtr,imgEnc3);
-    Instruction{18}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 2 with 3 colors';
-    imgUpdate3=importdata('Update3.png');
-    imageUpdate3=Screen('MakeTexture',wPtr,imgUpdate3);
+    imgEnc4=importdata('Encsz4.png');
+    imageEnc4=Screen('MakeTexture',wPtr,imgEnc4);
+    Instruction{18}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 2 with 4 colors';
+    imgUpdate4=importdata('Update4.png');
+    imageUpdate4=Screen('MakeTexture',wPtr,imgUpdate4);
     Instruction{19}='Of all 3 colors you need to indicate \n only the color of the HIGHLIGHTED square.';
     Instruction{20}='';
-    imgProbe3=importdata('ProbeSZ3.png');
-    imageProbe3=Screen('MakeTexture',wPtr,imgProbe3);
+    imgProbe4=importdata('ProbeSZ4.png');
+    imageProbe4=Screen('MakeTexture',wPtr,imgProbe4);
     Instruction{21} = 'Is everything clear?\n\n It is very important that you understand this part well and we realize that it might be confusing in the beginning.\n Please make contact with the researchers, they will start the practice when all questions are addressed..';
     
 elseif level == 2
@@ -108,11 +108,11 @@ for i=1:100
             case 12
                 Screen('DrawTexture', wPtr, imageProbe)
             case 17
-                Screen('DrawTexture', wPtr, imageEnc3)
+                Screen('DrawTexture', wPtr, imageEnc4)
             case 18
-                Screen('DrawTexture', wPtr, imageUpdate3)
+                Screen('DrawTexture', wPtr, imageUpdate4)
             case 20
-                Screen('DrawTexture',wPtr,imageProbe3)
+                Screen('DrawTexture',wPtr,imageProbe4)
         end
         if counter==12
             DrawFormattedText(wPtr,Instruction{counter},'center',pms.yCenter-90,pms.textColor,pms.wrapAt,[],[],pms.spacing);
