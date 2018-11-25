@@ -45,14 +45,14 @@ try
     pms.min=[0.1 0.2]; %smallest offer 0.1, then 0.2 then increases by step
     pms.max1=2.2; %max amount offered for v1
     pms.max2=4;%max amount offered for v2
-    pms.reps=3;%repetitions
+    pms.reps=2;%repetitions
     pms.hardOffer=2; %offer for hard task that remains fixed
     pms.easyOffer1=pms.min(2):pms.step:pms.max1; pms.easyOffer1=[pms.min(1) round(pms.easyOffer1*10)/10]; %fix bug and pairs for easy task
     pms.easyOffer2=pms.min(2):pms.step:pms.max2; pms.easyOffer2=[pms.min(1) round(pms.easyOffer2*10)/10];   %fix bug
     pms.numPairs1=length(pms.easyOffer1);%number of pairs
     pms.numPairs2=length(pms.easyOffer2);
-    pms.typeTask1 = 1:8; %1:4, Ignore all set sizes, 5:8 Update all set sizes
-    pms.typeTask2=1:4; %direct comparison has no condition so only 4
+    pms.typeTask1 = [1 3 5 7]; %1:2, Ignore all set sizes, 3:4 Update all set sizes
+    pms.typeTask2=[1 3]; %direct comparison has no condition so only 2
     pms.Conditions = {0,2}; %UPDATE IGNORE
     pms.numChoices1 = length(pms.typeTask1)*length(pms.easyOffer1)*pms.reps; %number of choices per version
     pms.numChoices2 = length(pms.typeTask2)*length(pms.easyOffer2)*pms.reps;
@@ -71,8 +71,8 @@ try
     pms.numChoices2Prac = length(pms.typeTask2)*length(pms.easyOffer2Prac)*pms.repsPrac;
     pms.numChoicesPrac=pms.numChoices1Prac+pms.numChoices2Prac;
     
-    pms.setSize=1:4;
-    pms.numBlocks=3;%number of blocks
+    pms.setSize=[1 3];
+    pms.numBlocks=2;%number of blocks
     pms.numBlocksPrac=1;
     pms.numPerBlock =pms.numChoices/pms.numBlocks; %trials per block
     
@@ -81,7 +81,7 @@ try
     pms.allowedResps.right = '.2';
     % timings
     pms.fixation = 1; %fixation before task
-    pms.maxRT =6; % max RT
+    pms.maxRT =5; % max RT
     pms.iti = 0.3; %between trials
     pms.jitter = 0; % should trial duration be jittered (no: 0, yes: 1)
     pms.fb= 0.3;

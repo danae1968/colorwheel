@@ -14,8 +14,11 @@ if ~exist(logdir,'dir')
     mkdir(rootdir,'Log');
 end
 
+runColorwheel=0;
+runChoice=1;
+runRedo=0;
 %% colorwheel memory task
-
+if runColorwheel
 colordir=fullfile(logdir,'Colorwheel');
 
 if ~exist(colordir,'dir')
@@ -40,9 +43,8 @@ BeautifulColorwheel(subNo,1,subdir) %practice=1
 %BeautifulColorwheel(subNo,0,subdir) %practice=0
 
 cd(rootdir)
-
+end
 %% choice task
-runChoice=0;
 if runChoice
 chdir           = fullfile(rootdir,'ChoiceTask');
 
@@ -68,11 +70,10 @@ end
 %%% choice task main script
 
 cd(chdir)
-BeautifulChoices(subNo,1,subdirCh);
+%BeautifulChoices(subNo,1,subdirCh);
 [~,choiceSZ, choiceCondition, bonus]=BeautifulChoices(subNo,0,subdirCh);
 end
 %% redo of colorwheel task
-runRedo=0;
 if runRedo
 cd(cwdir)
 BeautifulColorwheel(subNo,2,subdir,choiceSZ,choiceCondition,bonus)

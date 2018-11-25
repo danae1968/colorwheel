@@ -58,7 +58,14 @@ if pms.practice==0
     b1=[trlArray ones(length(trlArray),1)];b1=b1(randperm(length(b1))',:);
     b2=[trlArray 2*ones(length(trlArray),1)];b2=b2(randperm(length(b2))',:);
     b3=[trlArray 3*ones(length(trlArray),1)];b3=b3(randperm(length(b3))',:);
+    switch pms.numBlocks
+        case 1
+            trlArray=b1;
+        case 2
+            trlArray=[b1;b2];
+        case 3
     trlArray=[b1;b2;b3];
+    end
 elseif pms.practice==1
     trlArray(:,6)=trlArray(:,1); %2 blocks based on versions. version 1 one block, version 2 another
     trlArray=sortrows(trlArray,-6);

@@ -8,9 +8,9 @@ function [choiceSZ, choiceCondition, bonus]=Redo(pms,data)
 switch mod(pms.subNo,2)
     
     case 1
-        randomChoice=randsample(data.trialNumber(data.sz==3 & data.version==2 & data.choice~=9 & data.choiceAmount'<=2) ,1);
+        randomChoice=randsample(data.trialNumber(data.sz==1 & data.version==2 & data.choice~=9 & data.choiceAmount'<=2.6) ,1);
     case 0
-        randomChoice=randsample(data.trialNumber(data.sz==4 & data.version==2 & data.choice~=9 & data.choiceAmount'<=2) ,1);
+        randomChoice=randsample(data.trialNumber(data.sz==3 & data.version==2 & data.choice~=9 & data.choiceAmount'<=2.6) ,1);
 end
 
 % bonus=data.choiceAmount(randomChoice);
