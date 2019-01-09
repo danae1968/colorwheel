@@ -33,20 +33,32 @@ Screen('TextSize',wPtr,16);
 Screen('TextStyle',wPtr,1);
 Screen('TextFont',wPtr,'Courier New');
 
+EncSymbol='M';
 UpdSymbol='U';
 IgnSymbol='I';
+M_color=[0 0 0];
 U_color=[0 0 0];
 I_color=[0 0 0];
 %rect size
 rectOne=[0 0 100 100];
+rectTwo=[0 0 25 25];
 data=struct();
+ovalRect=CenterRectOnPoint(rectTwo,pms.xCenter,pms.yCenter);
 
 
 %% loop around trials and blocks for stimulus presentation
 for p=1:pms.numBlocks
     for g=1:pms.numTrials
-        for phase = 1:5
-            if phase == 1 %encoding phase
+        for phase = 1:7
+            if phase == 1 %new trial
+                Screen('FillOval',wPtr,pms.ovalColor,ovalRect);
+                Screen('Flip',wPtr)
+%                                                       imageArray=Screen('GetImage',wPtr);
+%                                     imwrite(imageArray,sprintf('Signal%d%d.png',g,p),'png');
+                WaitSecs(pms.signal)
+            elseif phase==2
+                Screen('Textsize', wPtr, 34);
+                Screen('Textfont', wPtr, 'Times New Roman');
                 switch trial(g,p).type
                     case {0 2}
                         switch trial(g,p).setSize  %switch between set sizes
@@ -76,30 +88,30 @@ for p=1:pms.numBlocks
                         end
                         
                         Screen('FillRect',wPtr,colorEnc,allRects);
-                        drawFixationCross(wPtr,rect)
+                        DrawFormattedText(wPtr, EncSymbol, 'center', 'center', M_color);
                         T.encoding_on(g,p) = GetSecs;
                         Screen('Flip',wPtr);
-                        
-%                         imageArray=Screen('GetImage',wPtr);
-%                         imwrite(imageArray,sprintf('Encoding%d%d.png',g,p),'png');
-
+%                         
+%                                                  imageArray=Screen('GetImage',wPtr);
+%                                                 imwrite(imageArray,sprintf('Encoding%d%d.png',g,p),'png');
+%                         
                         switch trial(g,p).type
                             case 0
-                                WaitSecs(pms.encDurationIgn);  
+                                WaitSecs(pms.encDurationIgn);
                             case 2
                                 WaitSecs(pms.encDurationUpd);
                         end
                         
-                        T.encoding_off(g,p) = GetSecs; 
+                        T.encoding_off(g,p) = GetSecs;
                         
                 end
                 
-            elseif phase == 2      %delay 1 phase
+            elseif phase == 3      %delay 1 phase
                 
                 drawFixationCross(wPtr,rect)
                 Screen('Flip',wPtr);
-% %                         imageArray=Screen('GetImage',wPtr);
-% %                         imwrite(imageArray,sprintf('Delay%d%d.png',g,p),'png');
+                % %                         imageArray=Screen('GetImage',wPtr);
+                % %                         imwrite(imageArray,sprintf('Delay%d%d.png',g,p),'png');
                 T.delay1_on(g,p) = GetSecs;
                 
                 if practice==1 || practice==2
@@ -108,22 +120,22 @@ for p=1:pms.numBlocks
                     switch nargin   %number of arguments
                         case 6      % 6 arguments in showTrial function:
                             
-                        switch trial(g,p).type
-                            case 0
-                                WaitSecs(pms.delay1DurationIgn);   
-                            case 2
-                                WaitSecs(pms.delay1DurationUpd); 
-                        end
-
+                            switch trial(g,p).type
+                                case 0
+                                    WaitSecs(pms.delay1DurationIgn);
+                                case 2
+                                    WaitSecs(pms.delay1DurationUpd);
+                            end
+                            
                         case 7      % 7 arguments in showTrial function:
                             if varargin{1}==1   %and variable argument is 1 (manipulation)
                                 WaitSecs(trial(g,p).delay1)     %use predefined delays in trial.mat
                             end
-                     end
-                end     
+                    end
+                end
                 T.delay1_off(g,p) = GetSecs;
                 
-            elseif phase == 3 %interference phase
+            elseif phase == 4 %interference phase
                 Screen('Textsize', wPtr, 34);
                 Screen('Textfont', wPtr, 'Times New Roman');
                               
@@ -162,8 +174,8 @@ for p=1:pms.numBlocks
                         DrawFormattedText(wPtr, IgnSymbol, 'center', 'center', I_color);
                         T.I_ignore_on(g,p) = GetSecs;
                         Screen('Flip',wPtr);
-%                                                     imageArray=Screen('GetImage',wPtr);
-%                                                     imwrite(imageArray,sprintf('InterI%d%d.png',g,p),'png');
+                        %                                                     imageArray=Screen('GetImage',wPtr);
+                        %                                                     imwrite(imageArray,sprintf('InterI%d%d.png',g,p),'png');
                         WaitSecs(pms.interfDurationIgn);
                         T.I_ignore_off(g,p) = GetSecs;
 
@@ -201,8 +213,8 @@ for p=1:pms.numBlocks
                         DrawFormattedText(wPtr, UpdSymbol, 'center', 'center', U_color);
                         T.I_update_on(g,p) = GetSecs;
                         Screen('Flip',wPtr);
-%                                                     imageArray=Screen('GetImage',wPtr);
-%                                                     imwrite(imageArray,sprintf('InterU%d%d.png',g,p),'png');
+                        %                                                     imageArray=Screen('GetImage',wPtr);
+                        %                                                     imwrite(imageArray,sprintf('InterU%d%d.png',g,p),'png');
                         WaitSecs(pms.interfDurationUpd);
 
                         T.I_update_off(g,p) = GetSecs;
@@ -210,97 +222,96 @@ for p=1:pms.numBlocks
                      
                 end % trial.type
                 
-            elseif phase == 4 %phase delay 2
-
-                 T.delay2_on(g,p) = GetSecs; 
-                 drawFixationCross(wPtr,rect)
-                 Screen('Flip',wPtr);
-        
-                 if practice==1 || practice==2 
-                     
-                             switch trial(g,p).type
-                                 case 0
-                                     WaitSecs(pms.delay2DurationIgnPr)
-                                 case 2                         
-                                     WaitSecs(pms.delay2DurationUpdPr) 
-                             end
-                             
-                 elseif practice==0
-                     switch nargin
-                         case 6 
-                             switch trial(g,p).type
-                                 case 0
-                                     WaitSecs(pms.delay2DurationIgn)
-                                 case 2                         
-                                     WaitSecs(pms.delay2DurationUpd) 
-                             end
-                         case 7
-                             if varargin{1}==1
-                                 WaitSecs(trial(g,p).delay2)
-                             end
-                     end
-                 end 
-            
-                  T.delay2_off(g,p) = GetSecs; 
-
-                            
-            elseif phase == 5  %probe phase
+            elseif phase == 5 %phase delay 2
                 
-                if practice==1 || practice==2 
-                locationsrect=trial(g,p).locations;
-                %for practice we randomly select a square for probe. Index
-                %2 selects randomly 1 of the encoding phase squares.
-                index2=randi(trial(g,p).setSize,1);
-                %index for same square during interference phase
-                index3=index2+trial(g,p).setSize;
-                probeRectXY=locationsrect(index2,:);
-                probeRectX=probeRectXY(1,1);
-                probeRectY=probeRectXY(1,2);
-
+                T.delay2_on(g,p) = GetSecs;
+                drawFixationCross(wPtr,rect)
+                Screen('Flip',wPtr);
                 
-                switch trial(g,p).type
-                    case {0}   %for Ignore
-                        %correct is the color during encoding for the
-                        %probed square
-                        trial(g,p).probeColorCorrect=trial(g,p).colors(index2,:);
-                        %lure is the color in the same location during
-                        %Interference
-                        trial(g,p).lureColor=trial(g,p).colors(index3,:);
-                        
-                    case {2 22}      %for Update and Update Long
-                        %reverse for Update
-                        trial(g,p).probeColorCorrect=trial(g,p).colors(index3,:); 
-                        trial(g,p).lureColor=trial(g,p).colors(index2,:);
+                if practice==1 || practice==2
+                    
+                    switch trial(g,p).type
+                        case 0
+                            WaitSecs(pms.delay2DurationIgnPr)
+                        case 2
+                            WaitSecs(pms.delay2DurationUpdPr)
+                    end
+                    
+                elseif practice==0
+                    switch nargin
+                        case 6
+                            switch trial(g,p).type
+                                case 0
+                                    WaitSecs(pms.delay2DurationIgn)
+                                case 2
+                                    WaitSecs(pms.delay2DurationUpd)
+                            end
+                        case 7
+                            if varargin{1}==1
+                                WaitSecs(trial(g,p).delay2)
+                            end
+                    end
                 end
                 
+                T.delay2_off(g,p) = GetSecs;
+                
+                
+            elseif phase == 6  %probe phase
+                
+                if practice==1 || practice==2
+                    locationsrect=trial(g,p).locations;
+                    %for practice we randomly select a square for probe. Index
+                    %2 selects randomly 1 of the encoding phase squares.
+                    index2=randi(trial(g,p).setSize,1);
+                    %index for same square during interference phase
+                    index3=index2+trial(g,p).setSize;
+                    probeRectXY=locationsrect(index2,:);
+                    probeRectX=probeRectXY(1,1);
+                    probeRectY=probeRectXY(1,2);
+                    
+                    
+                    switch trial(g,p).type
+                        case {0}   %for Ignore
+                            %correct is the color during encoding for the
+                            %probed square
+                            trial(g,p).probeColorCorrect=trial(g,p).colors(index2,:);
+                            %lure is the color in the same location during
+                            %Interference
+                            trial(g,p).lureColor=trial(g,p).colors(index3,:);
+                            
+                        case {2 22}      %for Update and Update Long
+                            %reverse for Update
+                            trial(g,p).probeColorCorrect=trial(g,p).colors(index3,:);
+                            trial(g,p).lureColor=trial(g,p).colors(index2,:);
+                    end
+                    
                 elseif practice==0
                     %for the defined stimuli probe is always the first
                     %location/square
                     probeRectX=trial(g,p).locations(1,1);
                     probeRectY=trial(g,p).locations(1,2);
-
+                    
                 end %if practice==1
-
-                if practice==1 || practice==2 
-                     [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
+                
+                if practice==1 || practice==2
+                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
                 elseif practice==0
-                     [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
+                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
                 end
                 
                 [respDif,tau,thetaCorrect,radius,lureDif]=respDev(colortheta,trial(g,p).probeColorCorrect,trial(g,p).lureColor,respX,respY,rect);
-                 save(fullfile(pms.colordir,dataFilenamePrelim));  
-         %Break after every block
-               if practice==0
-               if g==pms.numTrials && p<pms.numBlocks
-                    DrawFormattedText(wPtr,sprintf('End of block %d, press any key to continue.',p ),'center','center',[0 0 0]);
-                    Screen('Flip',wPtr)
-                    save(fullfile(pms.colordir,dataFilenamePrelim));
-                    RestrictKeysForKbCheck(32)   
-                    KbWait();
-                    RestrictKeysForKbCheck([])
-               end
-               end
-     %save responses and data into a struct.         
+                save(fullfile(pms.colordir,dataFilenamePrelim));
+                
+                %Break after every block
+                if practice==0
+                    if g==pms.numTrials && p<pms.numBlocks
+                        DrawFormattedText(wPtr,sprintf('End of block %d, press any key to continue.',p ),'center','center',[0 0 0]);
+                        Screen('Flip',wPtr)
+                        save(fullfile(pms.colordir,dataFilenamePrelim));
+                        KbWait();
+                    end
+                end
+                %save responses and data into a struct.
                 data(g,p).respCoord=[respX respY]; %saving response coordinates in struct where 1,1 is x and 1,2 y
                 data(g,p).rt=rt;
                 data(g,p).respCoordAll=[respXAll respYAll];
@@ -314,26 +325,31 @@ for p=1:pms.numBlocks
                 data(g,p).thetaCorrect=thetaCorrect;
                 data(g,p).tau=tau;
                 data(g,p).rect=rect;
-%                 data(g,p).colPie=trial(g,p).colPie;
+                %                 data(g,p).colPie=trial(g,p).colPie;
                 %add additional information to data
                 data(g,p).setsize = trial(g,p).setSize;
-%                 data(g,p).trialNum=trial(g,p).number;
+                %                 data(g,p).trialNum=trial(g,p).number;
                 data(g,p).type=trial(g,p).type;
                 data(g,p).location =trial(g,p).locations;
                 data(g,p).colors = trial(g,p).colors;
                 %data(g,p).interTime=trial(g,p).interTime;
                 if practice==0
-                    data(g,p).encColLoc1=trial(g,p).encColLoc1;          
+                    data(g,p).encColLoc1=trial(g,p).encColLoc1;
                     data(g,p).encColLoc2=trial(g,p).encColLoc2;
-                    data(g,p).encColLoc3=trial(g,p).encColLoc3;          
+                    data(g,p).encColLoc3=trial(g,p).encColLoc3;
                     data(g,p).encColLoc4=trial(g,p).encColLoc4;
-                    data(g,p).interColLoc1=trial(g,p).interColLoc1;          
+                    data(g,p).interColLoc1=trial(g,p).interColLoc1;
                     data(g,p).interColLoc2=trial(g,p).interColLoc2;
-                    data(g,p).interColLoc3=trial(g,p).interColLoc3;          
+                    data(g,p).interColLoc3=trial(g,p).interColLoc3;
                     data(g,p).interColLoc4=trial(g,p).interColLoc4;
                 end
+            elseif phase==7 %ITI
+                                drawFixationCross(wPtr,rect)
+                Screen('Flip',wPtr);
+                T.iti_on(g,p) = GetSecs;
+                WaitSecs(pms.iti)
             end %if phase ==1
-        end % for phase 1:5
+        end % for phase 1:6
     end% for p=1:numBlocks
 end  % for g=1:numTrials
 end

@@ -15,8 +15,9 @@ if ~exist(logdir,'dir')
 end
 
 runColorwheel=0;
-runChoice=1;
+runChoice=0;
 runRedo=0;
+rng('shuffle')
 %% colorwheel memory task
 if runColorwheel
 colordir=fullfile(logdir,'Colorwheel');
@@ -40,7 +41,7 @@ disp('TASK 1: Colorwheel');          % display which task starts.
 WaitSecs(2)
 
 BeautifulColorwheel(subNo,1,subdir) %practice=1
-%BeautifulColorwheel(subNo,0,subdir) %practice=0
+BeautifulColorwheel(subNo,0,subdir) %practice=0
 
 cd(rootdir)
 end

@@ -22,14 +22,14 @@ HideCursor;
 
 if level == 1
     
-    Instruction{1} = 'Welcome to our experiment.\n You can walk through the instructions by using the left and right arrow keys.\n Press right arrow to start...';
-    Instruction{2} = 'The first part is a memory task.\n Every trial of the task consists of 3 phases.First, you will have to memorize colors and locations. Then, you see new colors that you might need to memorize. Finally you are tested on our colorwheel!';
-    Instruction{3} =sprintf('Phase 1: you will see a colored square on the screen.\n The square will be shown for %d seconds.',pms.encDuration);
+    Instruction{1} = 'Welcome to our colorwheel memory task.\n You can walk through the instructions by using the left and right arrow keys.\n Press right arrow to start...';
+    Instruction{2} = 'Every trial of this task consists of 3 phases. First, you will have to memorize colors and locations. Then, you see new colors that you might need to memorize. Finally you are tested on our colorwheel!';
+    Instruction{3} =sprintf('Phase 1: you will see a colored square and the letter "M" (memorize) on the screen.\n The square will be shown for %.1f seconds.',pms.encDuration);
     Instruction{4} = 'You always need to memorize the color and the location of the square.';
     imgEnc=imread('Encoding.png');
     imageEnc=Screen('MakeTexture',wPtr,imgEnc);
-    Instruction{5}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 1: memorize color and location.';
-    Instruction{6} = 'Phase 2: you will see another square at the same location.\n The new square will be accompanied by a letter in the middle of the screen.';
+    Instruction{5}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 1: memorize (M) color and location.';
+    Instruction{6} = 'Phase 1:\n You always MEMORIZE the color and location of the square.\n\n Phase 2:\n You will see another square at the same location.\n The new square will also be accompanied by a letter in the middle of the screen. The letter can be I or U.';
     Instruction{7} = 'The letter is very important because it tells you what to do next.\n If the letter is I, you need to ignore the new square\n and continue to keep in memory the one from phase 1.';
     imgIgnore=importdata('Ignore.png');
     imageIgnore=Screen('MakeTexture',wPtr,imgIgnore);
@@ -38,13 +38,13 @@ if level == 1
     imgUpdate=importdata('Update.png');
     imageUpdate=Screen('MakeTexture',wPtr,imgUpdate);
     Instruction{10}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 2: Update this square to your memory.' ;
-    Instruction{11} = sprintf('Phase 3: you see a colorwheel and the frame of a square without color.\n Within %d seconds you need to indicate with a mouse click on the wheel, which color you needed to remember.',pms.maxRT);
+    Instruction{11} = sprintf('Phase 1:\n You always MEMORIZE the color and location of the square.\n\n Phase 2:\n If the letter in the centre is I:\n you IGNORE the new color in phase 2.\n If the letter in the centre is U:\n you UPDATE your memory with ONLY the new square.\n\n Phase 3:\n You see a colorwheel and the frame of a square without color.\n You need to indicate with a mouse click on the wheel, which color you needed to remember.\n You have %d seconds to respond.',pms.maxRT);
     imgProbe=importdata('Probe.png');
     imageProbe=Screen('MakeTexture',wPtr,imgProbe);
     Instruction{12}='Click on the correct color!\n (Not now, this is an example!)';
-    Instruction{13}='Only your first response counts. Please try to respond always, even if you are not certain, and try to be as accurate and fast as possible.Keep your hand on the mouse so that you have enough time to respond.';
+    Instruction{13}='Only your first response counts. Please try to respond always, even if you are not certain, and try to be as accurate and fast as possible. Keep your hand on the mouse so that you have enough time to respond.';
     Instruction{14}='Please try to always look at the screen while doing the task.';
-    Instruction{15} ='Summary: \n\n Phase 1:\n You always remember the color and location of the square.\n\n Phase 2:\n If the letter in the centre is I:\n you IGNORE the new color in phase 2.\n If the letter in the centre is U:\n you UPDATE your memory with ONLY the new square.\n\n Phase 3: On the colorwheel you indicate which color you needed to remember.';
+    Instruction{15} ='Summary: \n\n Phase 1:\n You always MEMORIZE the color and location of the square.\n\n Phase 2:\n If the letter in the centre is I:\n you IGNORE the new color in phase 2.\n If the letter in the centre is U:\n you UPDATE your memory with ONLY the new square.\n\n Phase 3: On the colorwheel you indicate which color you needed to remember.';
     Instruction{16} = 'We start with one square being presented at a time, but increase it to 3.\n When multiple colors are presented, try to memorize all colors and the according locations.\n\n';
     Instruction{17}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Phase 1 with 3 colors';
     imgEnc3=importdata('Encsz3.png');
@@ -54,15 +54,18 @@ if level == 1
     imageUpdate3=Screen('MakeTexture',wPtr,imgUpdate3);
     Instruction{19}='Of all 3 colors you need to indicate \n only the color of the HIGHLIGHTED square.';
     Instruction{20}='';
-    imgProbe3=importdata('ProbeSZ3.png');
+    imgProbe4=importdata('ProbeSZ3.png');
     imageProbe3=Screen('MakeTexture',wPtr,imgProbe3);
-    Instruction{21} = 'Is everything clear?\n\n It is very important that you understand this part well and we realize that it might be confusing in the beginning.\n Please make contact with the researchers, they will start the practice when all questions are addressed..';
+    Instruction{21}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Before every new trial you will see a black dot.';
+    imgSignal=importdata('Signal.png');    
+    imageSignal=Screen('MakeTexture',wPtr,imgSignal);
+    Instruction{22} = 'Is everything clear?\n\n It is very important that you understand this part well and we realize that it might be confusing in the beginning.\n Please make contact with the researchers, they will start the practice when all questions are addressed..';
     
 elseif level == 2
     
     Instruction{1} = 'You finished the practice.\n\n You may now proceed with the actual task.';
-    Instruction{2}='During the actual memory task, you will not receive feedback for your answers.';
-    Instruction{3}=sprintf('We split the task in %d blocks. \n\n After every block you can take a break and communicate with the researchers.',pms.numBlocks);
+    Instruction{2}='During the actual memory task, you will not receive feedback (2nd line) for your answers.';
+    Instruction{3}=sprintf('We split the task in %d blocks. \n\n After every block you can take a break or continue with the task.',pms.numBlocks);
     Instruction{4}='Good luck with the memory task!';
     
 elseif level ==3
@@ -71,7 +74,7 @@ elseif level ==3
     
 elseif level==4
     
-    Instruction{1}='This is the end of the memory task! \n\n Please contact the researchers.\n They will start the next part of the experiment.';
+    Instruction{1}='This is the end of the colorhweel memory task! \n\n Please contact the researchers.';
     
 elseif level==5
     
@@ -113,6 +116,8 @@ for i=1:100
                 Screen('DrawTexture', wPtr, imageUpdate3)
             case 20
                 Screen('DrawTexture',wPtr,imageProbe3)
+            case 21 
+                Screen('DrawTexture',wPtr,imageSignal)
         end
         if counter==12
             DrawFormattedText(wPtr,Instruction{counter},'center',pms.yCenter-90,pms.textColor,pms.wrapAt,[],[],pms.spacing);
