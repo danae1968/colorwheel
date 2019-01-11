@@ -1,4 +1,4 @@
-function [data,T,varargout] = showTrial(trial,pms,practice,dataFilenamePrelim,wPtr,rect,varargin)
+function [data,T] = showTrial(trial,pms,practice,dataFilenamePrelim,wPtr,rect,varargin)
 %this function shows the stimuli and collects the responses for the colorwheel
 %memory task. 
 
@@ -43,7 +43,6 @@ I_color=[0 0 0];
 rectOne=[0 0 100 100];
 rectTwo=[0 0 25 25];
 data=struct();
-gazedata=struct();
 ovalRect=CenterRectOnPoint(rectTwo,pms.xCenter,pms.yCenter);
 
 
@@ -65,7 +64,7 @@ for p=1:pms.numBlocks
                 Screen('FillOval',wPtr,pms.ovalColor,ovalRect);
                 Screen('Flip',wPtr)
 WaitSecs(pms.signal)
-if pms.trackGaze
+
                 %                                                       imageArray=Screen('GetImage',wPtr);
 %                                     imwrite(imageArray,sprintf('Signal%d%d.png',g,p),'png');
                     % During my task, participants must look at a central offer for 1
@@ -120,7 +119,7 @@ if pms.trackGaze
                             Screen('Flip',wPtr);
                         end
                     end                 
-end
+
             elseif phase==2
                 Screen('Textsize', wPtr, 34);
                 Screen('Textfont', wPtr, 'Times New Roman');
@@ -155,9 +154,8 @@ end
                         Screen('FillRect',wPtr,colorEnc,allRects);
                         DrawFormattedText(wPtr, EncSymbol, 'center', 'center', M_color);
                         T.encoding_on(g,p) = Screen('Flip',wPtr);
-                        if pms.trackGaze
-                        [itrack_data] = sampleGaze(driftShift,T.encoding_on(g,p),pms.trialDuration);                        
-                        end
+                        [itrack_data] = sampleGaze(driftShift,T.interference_on(g,p),pms.interfDuration);                        
+      
 
 %                                                  imageArray=Screen('GetImage',wPtr);
 %                                                 imwrite(imageArray,sprintf('Encoding%d%d.png',g,p),'png');
@@ -378,10 +376,6 @@ switch trial(g,p).type
                         Screen('Flip',wPtr)
                         save(fullfile(pms.colordir,dataFilenamePrelim));
                         KbWait();
-                        if pms.trackGaze
-                          Eyelink('Stoprecording')
-                          pms.el = EyelinkSetup(0,pms);
-                        end
                     end
                 end
                 %save responses and data into a struct.
@@ -406,14 +400,6 @@ switch trial(g,p).type
                 data(g,p).location =trial(g,p).locations;
                 data(g,p).colors = trial(g,p).colors;
                 %data(g,p).interTime=trial(g,p).interTime;
-                if pms.trackGaze
-                %     gazedata(g,p).encoding = itrack_encoding; % save all eyetracker data here
-%                     gazedata(g,p).interference = itrack_interference; % save all eyetracker data here
-%                     gazedata(g,p).probe = itrack_probe; % save all eyetracker data here
-                   pms.driftShift = driftShift; % update for next trial
-                   gazedata(g,p).data=itrack_data;
-                  varargout{3}=gazedata;
-                end
                 if practice==0
                     data(g,p).encColLoc1=trial(g,p).encColLoc1;
                     data(g,p).encColLoc2=trial(g,p).encColLoc2;

@@ -14,7 +14,7 @@ if ~exist(logdir,'dir')
     mkdir(rootdir,'Log');
 end
 
-runColorwheel=0;
+runColorwheel=1;
 runChoice=0;
 runRedo=0;
 rng('shuffle')

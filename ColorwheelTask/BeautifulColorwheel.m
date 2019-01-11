@@ -54,6 +54,8 @@ try
     end
 
     %% set experiment parameters
+    
+    pms.trackGaze=0;
     pms.numTrials = 32; % adaptable; important to be dividable by 2 (conditions) and multiple of 4 (set size)
     pms.numBlocks = 2;
 
@@ -70,16 +72,23 @@ try
     pms.numWheelColors=512;
     
     %text
-    pms.textColor=[0 0 0];
-    pms.background=[200,200,200];
-    pms.wrapAt=65;
-    pms.spacing=2;
-    pms.textSize=22;
-    pms.textFont='Times New Roman';
-    pms.textStyle=1; 
-    pms.ovalColor=[0 0 0];
-    pms.subNo=subNo;
-    pms.matlabVersion='R2013a';
+    pms.textColor           = [0 0 0];
+    pms.background          = [200,200,200];
+    pms.wrapAt              = 65;
+    pms.spacing             = 2;
+    pms.textSize            = 22;
+    pms.textFont            = 'Times New Roman';
+    pms.textStyle           = 1; 
+    pms.ovalColor           = [0 0 0];
+    pms.subNo               = subNo;
+    pms.matlabVersion       = 'R2016a';
+%     eyelink parameters
+    pms.driftCueCol = [10 150 10, 255]; % cue that central fix changes when drifting is indicated (changes into green)
+    pms.allowedResps.drift = 'left_control';
+    pms.allowedResps.drift = 'c';
+    pms.allowedResps.driftOK = 'd';
+    pms.fixDuration = 0.75; % required fixation duration in seconds before trials initiate
+    pms.diagTol = 100; % diagonal pixels of tolerance for fixation
     % timings
     pms.maxRT = 4; % max RT
     pms.encDuration = 2;    %2 seconds of encoding
@@ -100,11 +109,19 @@ try
     pms.jitter = 0;
     pms.iti=0.1;
     pms.signal=0.5;
+    pms.driftShift = [0,0]; % how much to adjust [x,y] for pupil drift, updated every trial
+    pms.driftCueCol = [10 150 10, 255]; % cue that central fix changes when drifting is indicated
+
     if exist('colordir','var')
         pms.colordir=colordir;
     else
         pms.colordir=pwd;
     end
+    
+    % initialize the random number generator
+    randSeed = sum(100*clock);
+    
+    
     %% display and screen
     % bit Added to address problem with high precision timestamping related
     % to graphics card problems
@@ -128,6 +145,10 @@ try
     pms.xCenter=rect(3)/2;
     pms.yCenter=rect(4)/2;     
     Screen('BlendFunction',wPtr,GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    if pms.trackGaze
+    EyelinkInitDefaults(wPtr);
+    end
+
     %% get trialstrcutre depending on pms
     %%%%%% prepare trials
     % function to get trialstructure using pms (parameters) as input
@@ -174,7 +195,7 @@ try
     Screen('TextFont',wPtr,pms.textFont);
   %% Color vision task
   if practice==1
-  colorVision(pms,wPtr,rect)
+%   colorVision(pms,wPtr,rect)
   end
     %% Experiment starts with instructions
     %%%%%%% get instructions
@@ -196,7 +217,12 @@ try
     WaitSecs(1); % initial interval (blank screen)
     %%%%%%
     % showTrial: in this function, the trials are defined and looped
-    [data, T] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
+    if pms.trackGaze
+    [data, T, gazedata] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
+    else
+            [data, T] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
+    end
+    
         % showTrial opens colorwheel2 and stdev function
     
         
