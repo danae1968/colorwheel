@@ -54,7 +54,7 @@ if level == 1
     imageUpdate3=Screen('MakeTexture',wPtr,imgUpdate3);
     Instruction{19}='Of all 3 colors you need to indicate \n only the color of the HIGHLIGHTED square.';
     Instruction{20}='';
-    imgProbe4=importdata('ProbeSZ3.png');
+    imgProbe3=importdata('ProbeSZ3.png');
     imageProbe3=Screen('MakeTexture',wPtr,imgProbe3);
     Instruction{21}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Before every new trial you will see a black dot.';
     imgSignal=importdata('Signal.png');    

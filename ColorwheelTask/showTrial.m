@@ -1,12 +1,12 @@
 function [data,T,varargout] = showTrial(trial,pms,practice,dataFilenamePrelim,wPtr,rect,varargin)
 %this function shows the stimuli and collects the responses for the colorwheel
-%memory task. 
+%memory task.
 
 %SYNTAX
 
 %[data,T] = SHOWTRIAL(trial,pms,practice,dataFilenamePrelim)
 % data:     struct with fields:respCoord (where the ppt clicked), rt, probeLocation (square that was probed)
-%           probeColorCorrect, respDif (deviance between click and correct color), thetaCorrect (correct angle), 
+%           probeColorCorrect, respDif (deviance between click and correct color), thetaCorrect (correct angle),
 %           tau (response angle),setsize,type(Ignore or Update),locations (square locations),colors
 %
 % T:        struct with timepoints for all phases of the task
@@ -14,11 +14,11 @@ function [data,T,varargout] = showTrial(trial,pms,practice,dataFilenamePrelim,wP
 % pms:      task parameteres defined in main script BeautifulColorwheel.m
 % practice: status of task, output of [subNo,dataFilename,dataFilenamePrelim,practice,manipulation]=getInfo
 % dataFilenamePrelim: name for log file between blogs provided by getInfo.m
-% 
+%
 % [data,T] = SHOWTRIAL(trial,pms,practice,dataFilenamePrelim,delaysManipulation)
 % delaysManipulation:     if provided as input and set to 1 the delay durations shift from the ones provided as
-% parameters, which are based on condition to the predefined ones in the trial structure. 
-% With this manipulation the delays are modified based on trial. 
+% parameters, which are based on condition to the predefined ones in the trial structure.
+% With this manipulation the delays are modified based on trial.
 
 %trials for practice session
 if practice==1
@@ -50,24 +50,24 @@ ovalRect=CenterRectOnPoint(rectTwo,pms.xCenter,pms.yCenter);
 %% loop around trials and blocks for stimulus presentation
 for p=1:pms.numBlocks
     if pms.trackGaze
-                driftShift = pms.driftShift;
-         pms.el = EyelinkSetup(1,pms);
+        driftShift = pms.driftShift;
+        pms.el = EyelinkSetup(1,wPtr);
         Eyelink('StartRecording')
-        Screen(FillRect',wPtr,pms.background,rect)
+        Screen('Flip',wPtr)
     end
     for g=1:pms.numTrials
-
+        
         
         for phase = 1:7
             
-
+            
             if phase == 1 %new trial
                 Screen('FillOval',wPtr,pms.ovalColor,ovalRect);
                 Screen('Flip',wPtr)
-WaitSecs(pms.signal)
-if pms.trackGaze
-                %                                                       imageArray=Screen('GetImage',wPtr);
-%                                     imwrite(imageArray,sprintf('Signal%d%d.png',g,p),'png');
+                WaitSecs(pms.signal)
+                if pms.trackGaze
+                    %                                                       imageArray=Screen('GetImage',wPtr);
+                    %                                     imwrite(imageArray,sprintf('Signal%d%d.png',g,p),'png');
                     % During my task, participants must look at a central offer for 1
                     % sec for the trial to proceed. Since the calibration for gaze location
                     % might drift over time, I've built in a drift calibration routine using
@@ -82,12 +82,12 @@ if pms.trackGaze
                     % wRect is just the monitor window rectangle, wptr, is the window ID
                     % pointer, pms.bkgd is a rectangle in which I want stimuli to be
                     % displayed.
-
+                    
                     % Ensure central fixation before showing trial
                     driftShift = pms.driftShift;
                     fixOn = 0; % continuous amount of time spent fixating on cross
                     doDrift = 0; % to break out of both loops
-
+                    
                     while fixOn < pms.fixDuration
                         sample = getEyelinkData();
                         while doDrift % drift correction
@@ -102,26 +102,25 @@ if pms.trackGaze
                                 Screen('Flip',wPtr);
                             end
                         end
-
+                        
                         time1 = GetSecs();
                         while ((sample(1)+driftShift(1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
                             sample = getEyelinkData();
                             time2 = GetSecs();
                             fixOn = time2 - time1;
                         end
-
+                        
                         % if not yet met the timelimit and gaze outside target circle
                         [~, ~, keyCode] = KbCheck();
                         if strcmp(pms.allowedResps.drift,KbName(keyCode));
                             %report = '***** The participant indicates drift! *****'
                             doDrift = 1;
-                            DrawFormattedText(wPtr, offer, 'center', 'center', pms.driftCueCol); % change its color
                             DrawFormattedText(wPtr, 'Please look at the center of the screen.', 'center', 'center', pms.driftCueCol);
                             Screen('Flip',wPtr);
                         end
-                    end                 
-end
-            elseif phase==2
+                    end
+                end
+            elseif phase==2 %encoding
                 Screen('Textsize', wPtr, 34);
                 Screen('Textfont', wPtr, 'Times New Roman');
                 switch trial(g,p).type
@@ -156,21 +155,26 @@ end
                         DrawFormattedText(wPtr, EncSymbol, 'center', 'center', M_color);
                         T.encoding_on(g,p) = Screen('Flip',wPtr);
                         if pms.trackGaze
-                        [itrack_data] = sampleGaze(driftShift,T.encoding_on(g,p),pms.trialDuration);                        
-                        end
-
-%                                                  imageArray=Screen('GetImage',wPtr);
-%                                                 imwrite(imageArray,sprintf('Encoding%d%d.png',g,p),'png');
-%                         
+                            switch trial(g,p).type
+                                case 0
+                                    [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationIgn);
+                                case 2
+                                    [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationUpd);
+                            end
+                        else
                         
-
-switch trial(g,p).type
+                        %                                                  imageArray=Screen('GetImage',wPtr);
+                        %                                                 imwrite(imageArray,sprintf('Encoding%d%d.png',g,p),'png');
+                        %
+                        
+                        
+                        switch trial(g,p).type
                             case 0
                                 WaitSecs(pms.encDurationIgn);
                             case 2
                                 WaitSecs(pms.encDurationUpd);
                         end
-                        
+                        end
                         T.encoding_off(g,p) = GetSecs;
                         
                 end
@@ -207,11 +211,11 @@ switch trial(g,p).type
             elseif phase == 4 %interference phase
                 Screen('Textsize', wPtr, 34);
                 Screen('Textfont', wPtr, 'Times New Roman');
-                              
+                
                 switch trial(g,p).type
-                             
+                    
                     case 0 %interference Ignore
-                     
+                        
                         switch trial(g,p).setSize
                             case 1
                                 rectOne=CenterRectOnPoint(rectOne,trial(g,p).locations(1,1),trial(g,p).locations(1,2));
@@ -241,15 +245,23 @@ switch trial(g,p).type
                         
                         Screen('FillRect',wPtr,colorInt,allRects);
                         DrawFormattedText(wPtr, IgnSymbol, 'center', 'center', I_color);
-                        T.I_ignore_on(g,p) = GetSecs;
-                        Screen('Flip',wPtr);
+                        T.I_ignore_on(g,p) =    Screen('Flip',wPtr);
+                     
+                         if pms.trackGaze
+                    
+                                    [itrack_interference] = sampleGaze(driftShift,T.I_ignore_on(g,p),pms.interfDurationIgn);
+                         
+                    
+                         else
+                        
                         %                                                     imageArray=Screen('GetImage',wPtr);
                         %                                                     imwrite(imageArray,sprintf('InterI%d%d.png',g,p),'png');
                         WaitSecs(pms.interfDurationIgn);
+                         end
                         T.I_ignore_off(g,p) = GetSecs;
-
+                        
                     case 2 %Inteference Update
-                                           
+                        
                         switch trial(g,p).setSize
                             case 1
                                 rectOne=CenterRectOnPoint(rectOne,trial(g,p).locations(1,1),trial(g,p).locations(1,2));
@@ -261,7 +273,7 @@ switch trial(g,p).type
                                 allRects=[rectOne',rectTwo'];
                                 colorInt=(trial(g,p).colors((3:4),:))';
                             case 3
-    
+                                
                                 rectOne=CenterRectOnPoint(rectOne,trial(g,p).locations(1,1),trial(g,p).locations(1,2));
                                 rectTwo=CenterRectOnPoint(rectOne,trial(g,p).locations(2,1),trial(g,p).locations(2,2));
                                 rectThree=CenterRectOnPoint(rectOne,trial(g,p).locations(3,1),trial(g,p).locations(3,2));
@@ -280,15 +292,22 @@ switch trial(g,p).type
                         
                         Screen('FillRect',wPtr,colorInt,allRects);
                         DrawFormattedText(wPtr, UpdSymbol, 'center', 'center', U_color);
-                        T.I_update_on(g,p) = GetSecs;
-                        Screen('Flip',wPtr);
+                        T.I_update_on(g,p) = Screen('Flip',wPtr);
+                        
+                                   if pms.trackGaze
+                    
+                                    [itrack_interference] = sampleGaze(driftShift,T.I_update_on(g,p),pms.interfDurationUpd);
+                         
+                    
+                                   else
+                        
                         %                                                     imageArray=Screen('GetImage',wPtr);
                         %                                                     imwrite(imageArray,sprintf('InterU%d%d.png',g,p),'png');
-                        WaitSecs(pms.interfDurationUpd);
-
+                  WaitSecs(pms.interfDurationUpd);
+                                   end                        
                         T.I_update_off(g,p) = GetSecs;
                         
-                     
+                        
                 end % trial.type
                 
             elseif phase == 5 %phase delay 2
@@ -379,8 +398,8 @@ switch trial(g,p).type
                         save(fullfile(pms.colordir,dataFilenamePrelim));
                         KbWait();
                         if pms.trackGaze
-                          Eyelink('Stoprecording')
-                          pms.el = EyelinkSetup(0,pms);
+                            Eyelink('Stoprecording')
+                            pms.el = EyelinkSetup(0,pms);
                         end
                     end
                 end
@@ -407,12 +426,13 @@ switch trial(g,p).type
                 data(g,p).colors = trial(g,p).colors;
                 %data(g,p).interTime=trial(g,p).interTime;
                 if pms.trackGaze
-                %     gazedata(g,p).encoding = itrack_encoding; % save all eyetracker data here
-%                     gazedata(g,p).interference = itrack_interference; % save all eyetracker data here
-%                     gazedata(g,p).probe = itrack_probe; % save all eyetracker data here
-                   pms.driftShift = driftShift; % update for next trial
-                   gazedata(g,p).data=itrack_data;
-                  varargout{3}=gazedata;
+                    %     gazedata(g,p).encoding = itrack_encoding; % save all eyetracker data here
+                    %                     gazedata(g,p).interference = itrack_interference; % save all eyetracker data here
+                    %                     gazedata(g,p).probe = itrack_probe; % save all eyetracker data here
+                    pms.driftShift = driftShift; % update for next trial
+                    gazedata(g,p).encoding=itrack_encoding;
+                     gazedata(g,p).interference=itrack_interference;
+                    varargout{3}=gazedata;
                 end
                 if practice==0
                     data(g,p).encColLoc1=trial(g,p).encColLoc1;
@@ -425,7 +445,7 @@ switch trial(g,p).type
                     data(g,p).interColLoc4=trial(g,p).interColLoc4;
                 end
             elseif phase==7 %ITI
-                                drawFixationCross(wPtr,rect)
+                drawFixationCross(wPtr,rect)
                 Screen('Flip',wPtr);
                 T.iti_on(g,p) = GetSecs;
                 WaitSecs(pms.iti)

@@ -55,7 +55,7 @@ try
 
     %% set experiment parameters
     
-    pms.trackGaze=0;
+    pms.trackGaze=1;
     pms.numTrials = 32; % adaptable; important to be dividable by 2 (conditions) and multiple of 4 (set size)
     pms.numBlocks = 2;
 
@@ -111,6 +111,8 @@ try
     pms.signal=0.5;
     pms.driftShift = [0,0]; % how much to adjust [x,y] for pupil drift, updated every trial
     pms.driftCueCol = [10 150 10, 255]; % cue that central fix changes when drifting is indicated
+pms.trialDurationIgn=pms.encDurationIgn+pms.delay1DurationIgn+pms.interfDurationIgn+pms.delay2DurationIgn+pms.maxRT+pms.feedbackDuration;
+pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDurationUpd+pms.delay2DurationUpd+pms.maxRT+pms.feedbackDuration;
 
     if exist('colordir','var')
         pms.colordir=colordir;
