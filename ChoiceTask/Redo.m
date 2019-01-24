@@ -5,13 +5,7 @@ function [choiceSZ, choiceCondition, bonus]=Redo(pms,data)
 % bonus=pms.redoAmount
 
 %% choose by set size, even/odd choice between sz 3 or 4
-switch mod(pms.subNo,2)
-    
-    case 1
-        randomChoice=randsample(data.trialNumber(data.sz==1 & data.version==2 & data.choice~=9 & data.choiceAmount'<=2.6) ,1);
-    case 0
-        randomChoice=randsample(data.trialNumber(data.sz==3 & data.version==2 & data.choice~=9 & data.choiceAmount'<=2.6) ,1);
-end
+        randomChoice=randsample(data.trialNumber(data.version==2 & data.choice~=9) ,1);
 
 % bonus=data.choiceAmount(randomChoice);
 choiceSZ=data.sz(randomChoice);

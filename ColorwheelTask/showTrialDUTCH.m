@@ -1,4 +1,4 @@
-function [data,T,varargout] = showTrial(trial,pms,practice,dataFilenamePrelim,wPtr,rect,varargin)
+function [data,T,varargout] = showTrialDUTCH(trial,pms,practice,dataFilenamePrelim,wPtr,rect,varargin)
 %this function shows the stimuli and collects the responses for the colorwheel
 %memory task.
 
@@ -33,9 +33,9 @@ Screen('TextSize',wPtr,16);
 Screen('TextStyle',wPtr,1);
 Screen('TextFont',wPtr,'Courier New');
 
-EncSymbol='M';
-UpdSymbol='U';
-IgnSymbol='I';
+EncSymbol='H';
+UpdSymbol='V';
+IgnSymbol='N';
 M_color=[0 0 0];
 U_color=[0 0 0];
 I_color=[0 0 0];
@@ -104,7 +104,7 @@ for p=1:pms.numBlocks
                         end
                         
                         time1 = GetSecs();
-                        while ((sample(1)+driftShift(1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
+                        while ((sample(1)+driftShift(ColorwheelTask1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
                             sample = getEyelinkData();
                             time2 = GetSecs();
                             fixOn = time2 - time1;
@@ -115,8 +115,7 @@ for p=1:pms.numBlocks
                         if strcmp(pms.allowedResps.drift,KbName(keyCode));
                             %report = '***** The participant indicates drift! *****'
                             doDrift = 1;
-                            DrawFormattedText(wPtr, offer, 'center', 'center', pms.driftCueCol); % change its color
-                            DrawFormattedText(wPtr, 'Please look at the center of the screen.', 'center', 'center', pms.driftCueCol);
+                            DrawFormattedText(wPtr, 'Kijk naar het midden van het scherm.', 'center', 'center', pms.driftCueCol);
                             Screen('Flip',wPtr);
                         end
                     end
@@ -162,11 +161,11 @@ for p=1:pms.numBlocks
                                 case 2
                                     [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationUpd);
                             end
-                        end
+                        else
                         
-                        %                                                  imageArray=Screen('GetImage',wPtr);
-                        %                                                 imwrite(imageArray,sprintf('Encoding%d%d.png',g,p),'png');
-                        %
+%                                                                          imageArray=Screen('GetImage',wPtr);
+%                                                                         imwrite(imageArray,sprintf('Encoding%d%dDUTCH.png',g,p),'png');
+                        
                         
                         
                         switch trial(g,p).type
@@ -175,7 +174,7 @@ for p=1:pms.numBlocks
                             case 2
                                 WaitSecs(pms.encDurationUpd);
                         end
-                        
+                        end
                         T.encoding_off(g,p) = GetSecs;
                         
                 end
@@ -246,19 +245,19 @@ for p=1:pms.numBlocks
                         
                         Screen('FillRect',wPtr,colorInt,allRects);
                         DrawFormattedText(wPtr, IgnSymbol, 'center', 'center', I_color);
-                        T.I_ignore_on(g,p) = GetSecs;
-                        Screen('Flip',wPtr);
+                        T.I_ignore_on(g,p) =    Screen('Flip',wPtr);
+                     
                          if pms.trackGaze
-                            switch trial(g,p).type
-                                case 0
-                                    [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationIgn);
-                                case 2
-                                    [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationUpd);
-                            end
-                        end
-                        %                                                     imageArray=Screen('GetImage',wPtr);
-                        %                                                     imwrite(imageArray,sprintf('InterI%d%d.png',g,p),'png');
+                    
+                                    [itrack_interference] = sampleGaze(driftShift,T.I_ignore_on(g,p),pms.interfDurationIgn);
+                         
+                    
+                         else
+%                         
+%                                                                             imageArray=Screen('GetImage',wPtr);
+%                                                                             imwrite(imageArray,sprintf('InterI%d%dDUTCH.png',g,p),'png');
                         WaitSecs(pms.interfDurationIgn);
+                         end
                         T.I_ignore_off(g,p) = GetSecs;
                         
                     case 2 %Inteference Update
@@ -293,12 +292,19 @@ for p=1:pms.numBlocks
                         
                         Screen('FillRect',wPtr,colorInt,allRects);
                         DrawFormattedText(wPtr, UpdSymbol, 'center', 'center', U_color);
-                        T.I_update_on(g,p) = GetSecs;
-                        Screen('Flip',wPtr);
-                        %                                                     imageArray=Screen('GetImage',wPtr);
-                        %                                                     imwrite(imageArray,sprintf('InterU%d%d.png',g,p),'png');
-                        WaitSecs(pms.interfDurationUpd);
+                        T.I_update_on(g,p) = Screen('Flip',wPtr);
                         
+                                   if pms.trackGaze
+                    
+                                    [itrack_interference] = sampleGaze(driftShift,T.I_update_on(g,p),pms.interfDurationUpd);
+                         
+                    
+                                   else
+                        
+%                                                                             imageArray=Screen('GetImage',wPtr);
+%                                                                             imwrite(imageArray,sprintf('InterU%d%dDUTCH.png',g,p),'png');
+                  WaitSecs(pms.interfDurationUpd);
+                                   end                        
                         T.I_update_off(g,p) = GetSecs;
                         
                         
@@ -375,19 +381,27 @@ for p=1:pms.numBlocks
                     
                 end %if practice==1
                 
+                if strcmp(pms.language,'DUTCH')
+
                 if practice==1 || practice==2
+                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
+                elseif practice==0
+                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
+                end
+                else
+                    if practice==1 || practice==2
                     [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
                 elseif practice==0
                     [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
+                    end
                 end
-                
                 [respDif,tau,thetaCorrect,radius,lureDif]=respDev(colortheta,trial(g,p).probeColorCorrect,trial(g,p).lureColor,respX,respY,rect);
                 save(fullfile(pms.colordir,dataFilenamePrelim));
                 
                 %Break after every block
                 if practice==0
                     if g==pms.numTrials && p<pms.numBlocks
-                        DrawFormattedText(wPtr,sprintf('End of block %d, press any key to continue.',p ),'center','center',[0 0 0]);
+                        DrawFormattedText(wPtr,sprintf('Dit is het einde van blok %d, druk op een toets om verder te gaan.',p ),'center','center',[0 0 0]);
                         Screen('Flip',wPtr)
                         save(fullfile(pms.colordir,dataFilenamePrelim));
                         KbWait();
@@ -424,7 +438,8 @@ for p=1:pms.numBlocks
                     %                     gazedata(g,p).interference = itrack_interference; % save all eyetracker data here
                     %                     gazedata(g,p).probe = itrack_probe; % save all eyetracker data here
                     pms.driftShift = driftShift; % update for next trial
-                    gazedata(g,p).data=itrack_encoding;
+                    gazedata(g,p).encoding=itrack_encoding;
+                     gazedata(g,p).interference=itrack_interference;
                     varargout{3}=gazedata;
                 end
                 if practice==0
@@ -446,5 +461,3 @@ for p=1:pms.numBlocks
         end % for phase 1:6
     end% for p=1:numBlocks
 end  % for g=1:numTrials
-end
-

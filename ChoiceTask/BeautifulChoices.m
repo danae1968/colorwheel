@@ -40,6 +40,7 @@ try
     end
     %% set experiment parameters
     %task version 1: No Redo; Version2: Direct comparison
+    pms.language='DUTCH';
     pms.practice=practice;
     pms.step=0.2;
     pms.min=[0.1 0.2]; %smallest offer 0.1, then 0.2 then increases by step
@@ -148,13 +149,21 @@ try
     % show instructions
 % 
   %for now
+      if strcmp(pms.language,'DUTCH')
+
     if     practice==1
+           getInstructionsChoiceDUTCH(1,pms,wPtr);
+    elseif practice==0
+           getInstructionsChoiceDUTCH(4,pms,wPtr);
+    end
+
+      else
+            if     practice==1
            getInstructionsChoice(1,pms,wPtr);
     elseif practice==0
            getInstructionsChoice(4,pms,wPtr);
-    end
-
-    
+            end
+      end
     %% Experiment starts with trials
     % baseline for event onset timestamps
     
@@ -166,18 +175,29 @@ try
     pms.exptOnset = GetSecs;
     %%%%%%
     % show the offers and collect a response (1 = easy, 2 = hard, 9 = too slow)
-    [data] = showChoiceTrialFixed(pms, data, wPtr, rect, dataHeader); %adapt MF
+          if strcmp(pms.language,'DUTCH')
 
+    [data] = showChoiceTrialFixedDUTCH(pms, data, wPtr, rect, dataHeader); %adapt MF
+          else
+                  [data] = showChoiceTrialFixed(pms, data, wPtr, rect, dataHeader); %adapt MF
+          end
     %% Save the data
      save(fullfile(pms.choicedir,dataFilename));
     %% Close-out tasks
-        
+
    if practice==1
+                         if strcmp(pms.language,'DUTCH')
+       getInstructionsChoiceDUTCH(3,pms,wPtr)        
+                         else
        getInstructionsChoice(3,pms,wPtr)        
-   
+                         end
    elseif practice==0
        %%redo
-    getInstructionsChoice(5,pms,wPtr)   
+                                if strcmp(pms.language,'DUTCH')
+    getInstructionsChoiceDUTCH(5,pms,wPtr)   
+                                else
+    getInstructionsChoice(5,pms,wPtr) 
+                                end
     [choiceSZ, choiceCondition,bonus]=Redo(pms,data);
     varargout{1}=choiceSZ;
     varargout{2}=choiceCondition;

@@ -14,12 +14,11 @@ if ~exist(logdir,'dir')
     mkdir(rootdir,'Log');
 end
 
-runColorwheel=1;
-runChoice=0;
-runRedo=0;
+runColorwheel=0;
+runChoice=1;
+runRedo=1;
 rng('shuffle')
 %% colorwheel memory task
-if runColorwheel
 colordir=fullfile(logdir,'Colorwheel');
 
 if ~exist(colordir,'dir')
@@ -35,7 +34,7 @@ else
     errordlg('Caution! Participant file name already exists!','Filename exists');
     return
 end
-
+if runColorwheel
 cd(cwdir)
 disp('TASK 1: Colorwheel');          % display which task starts.
 WaitSecs(2)
@@ -71,7 +70,7 @@ end
 %%% choice task main script
 
 cd(chdir)
-%BeautifulChoices(subNo,1,subdirCh);
+BeautifulChoices(subNo,1,subdirCh);
 [~,choiceSZ, choiceCondition, bonus]=BeautifulChoices(subNo,0,subdirCh);
 end
 %% redo of colorwheel task

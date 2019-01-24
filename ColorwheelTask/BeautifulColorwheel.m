@@ -54,8 +54,8 @@ try
     end
 
     %% set experiment parameters
-    
-    pms.trackGaze=1;
+    pms.language='DUTCH';
+    pms.trackGaze=0;
     pms.numTrials = 32; % adaptable; important to be dividable by 2 (conditions) and multiple of 4 (set size)
     pms.numBlocks = 2;
 
@@ -197,11 +197,27 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
     Screen('TextFont',wPtr,pms.textFont);
   %% Color vision task
   if practice==1
-%   colorVision(pms,wPtr,rect)
+      if strcmp(pms.language,'DUTCH')
+          colorVisionDUTCH(pms,wPtr,rect)
+      else
+   colorVision(pms,wPtr,rect)
+      end
   end
     %% Experiment starts with instructions
     %%%%%%% get instructions
     % show instructions
+    if strcmp(pms.language,'DUTCH')
+  
+          if     practice==1
+           getInstructionsDUTCH(1,pms,wPtr);
+    elseif practice==0
+           getInstructionsDUTCH(2,pms,wPtr);
+    elseif practice==2
+           getInstructionsDUTCH(5,pms,wPtr);
+
+          end
+    else
+
     if     practice==1
            getInstructions(1,pms,wPtr);
     elseif practice==0
@@ -210,7 +226,8 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
            getInstructions(5,pms,wPtr);
 
     end
-
+    end
+    
     %% Experiment starts with trials
     % stimOnset = Screen(wPtr,'Flip'); CHECK onsets
     % onset = stimOnset-exptOnset;
@@ -219,24 +236,42 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
     WaitSecs(1); % initial interval (blank screen)
     %%%%%%
     % showTrial: in this function, the trials are defined and looped
+    if strcmp(pms.language,'DUTCH')
+  
+          if pms.trackGaze
+    [data, T, gazedata] = showTrialDUTCH(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
+    else
+            [data, T] = showTrialDUTCH(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
+          end
+    else
     if pms.trackGaze
     [data, T, gazedata] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
     else
             [data, T] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
     end
-    
+    end
         % showTrial opens colorwheel2 and stdev function
     
         
     %% Save the data
     save(fullfile(pms.colordir,dataFilename));
     %% Close-out tasks
+    if strcmp(pms.language,'DUTCH')
+if practice==0
+       getInstructionsDUTCH(4,pms,wPtr)   
+    elseif practice==1
+       getInstructionsDUTCH(3,pms,wPtr)   
+    elseif practice==2
+        getInstructionsDUTCH(6,pms,wPtr)
+end
+    else 
     if practice==0
        getInstructions(4,pms,wPtr)   
     elseif practice==1
        getInstructions(3,pms,wPtr)   
     elseif practice==2
         getInstructions(6,pms,wPtr)
+    end
     end
     
    if practice~=1
@@ -249,7 +284,7 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
    end
 catch ME
     disp(getReport(ME));
-    keyboard
+@    keyboard
     
     % save data
     save(fullfile(pms.colordir,dataFilename));

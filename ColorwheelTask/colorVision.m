@@ -22,7 +22,7 @@ ShowCursor('Arrow'); %we can change the shape of the mouse and then type ShowCur
 SetMouse(rect(3)/2,rect(4)/2,wPtr);
 testOnset=GetSecs();
 wrptx=rect(3)/4;
-message='Welcome to our memory task!\n\n\n Before we start we need to check your color sensitivity. \n\n You will see a colored square in the middle of the screen.\n\n Find the corresponding color on the colorwheel and click it!\n\n Try to be as accurate as possible, but no need to take a lot of time to respond!\n\n\n  This is not a validated color vision test, just relevant specifically for our task.\n\n Press space to start.';
+message='Welkom bij onze geheugen taak!\n\n\n Voordat we gaan beginnenefore we start we need to check your color sensitivity. \n\n You will see a colored square in the middle of the screen.\n\n Find the corresponding color on the colorwheel and click it!\n\n Try to be as accurate as possible, but no need to take a lot of time to respond!\n\n\n  This is not a validated color vision test, just relevant specifically for our task.\n\n Press space to start.';
 passingScore=15;
 
 DrawFormattedText(wPtr, message,'center','center',[],wrptx)
