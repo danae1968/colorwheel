@@ -9,7 +9,7 @@ ylength = rect(4); %screen height y
 %define left centre (LC) and right centre (RC)
 LC = [xlength/4, ylength/2];
 RC = [xlength*(3/4), ylength/2];
-rectsizeFB = [0 0 250 250];
+rectsizeFB = [0 0 300 300];
 rectsizeC= [0 0 xlength/1.2 ylength/1.5];
 FB_left = CenterRectOnPoint(rectsizeFB,LC(1)+60,LC(2));
 FB_right = CenterRectOnPoint(rectsizeFB,RC(1)-40,RC(2));
@@ -22,7 +22,7 @@ locations_left = [LC + [-offset -offset]; LC + [offset -offset]; LC + [offset of
 locations_right = [RC + [-offset -offset]; RC + [offset -offset]; RC + [offset offset]; RC + [-offset offset]];
 
 % 4) text on screen while choice
-msgUPD = 'Vervangen';
+msgUPD = 'Vervang';
 msgIGN = 'Negeer';
 
 
@@ -45,7 +45,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeL='Niet opnieuw';
                             msgTypeR='Negeer 1';
                         case 2
-                            msgTypeL='Vervangen 1';
+                            msgTypeL='Vervang 1';
                             msgTypeR='Negeer 1';
                     end
                     
@@ -56,7 +56,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeL='Niet opnieuw';
                             msgTypeR='Negeer 2';
                         case 2
-                            msgTypeL='Vervangen 2';
+                            msgTypeL='Vervang 2';
                             msgTypeR='Negeer 2';
                     end
                 case 3                % setsize 4
@@ -65,7 +65,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeL='Niet opnieuw';
                             msgTypeR='Negeer 3';
                         case 2
-                            msgTypeL='Vervangen 3';
+                            msgTypeL='Vervang 3';
                             msgTypeR='Negeer 3';
                     end
                     
@@ -75,28 +75,28 @@ for trial = 1:length(data.trialNumber)
                             msgTypeL='Niet opnieuw';
                             msgTypeR='Negeer 4';
                         case 2
-                            msgTypeL='Vervangen 4';
+                            msgTypeL='Vervang 4';
                             msgTypeR='Negeer 4';
                     end
                 case 5 %Update 1
                     
                     msgTypeL='Niet opnieuw';
-                    msgTypeR='Vervangen 1';
+                    msgTypeR='Vervang 1';
                     
                 case 6 % Update 2
                     
                     msgTypeL='Niet opnieuw';
-                    msgTypeR='Vervangen 2';
+                    msgTypeR='Vervang 2';
                     
                     
                 case 7 % Update 3
                     
                     msgTypeL='Niet opnieuw';
-                    msgTypeR='Vervangen 3';
+                    msgTypeR='Vervang 3';
                     
-                case 8 %Vervangen 4
+                case 8 %Vervang 4
                     msgTypeL='Niet opnieuw';
-                    msgTypeR='Vervangen 4';
+                    msgTypeR='Vervang 4';
                     
             end %switch typeTask
             
@@ -113,7 +113,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeR='Niet opnieuw';
                             msgTypeL='Negeer 1';
                         case 2
-                            msgTypeR='Vervangen 1';
+                            msgTypeR='Vervang 1';
                             msgTypeL='Negeer 1';
                     end
                     
@@ -124,7 +124,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeR='Niet opnieuw';
                             msgTypeL='Negeer 2';
                         case 2
-                            msgTypeR='Vervangen 2';
+                            msgTypeR='Vervang 2';
                             msgTypeL='Negeer 2';
                     end
                 case 3                % setsize 4
@@ -133,7 +133,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeR='Niet opnieuw';
                             msgTypeL='Negeer 3';
                         case 2
-                            msgTypeR='Vervangen 3';
+                            msgTypeR='Vervang 3';
                             msgTypeL='Negeer 3';
                     end
                     
@@ -143,28 +143,28 @@ for trial = 1:length(data.trialNumber)
                             msgTypeR='Niet opnieuw';
                             msgTypeL='Negeer 4';
                         case 2
-                            msgTypeR='Vervangen 4';
+                            msgTypeR='Vervang 4';
                             msgTypeL='Negeer 4';
                     end
                 case 5 %Update 1
                     
                     msgTypeR='Niet opnieuw';
-                    msgTypeL='Vervangen 1';
+                    msgTypeL='Vervang 1';
                     
                 case 6 % Update 2
                     
                     msgTypeR='Niet opnieuw';
-                    msgTypeL='Vervangen 2';
+                    msgTypeL='Vervang 2';
                     
                     
                 case 7 % Update 3
                     
                     msgTypeR='Niet opnieuw';
-                    msgTypeL='Vervangen 3';
+                    msgTypeL='Vervang 3';
                     
                 case 8 %Update 4
                     msgTypeR='Niet opnieuw';
-                    msgTypeL='Vervangen 4';
+                    msgTypeL='Vervang 4';
                     
             end %switch typeTask
             

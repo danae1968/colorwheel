@@ -71,8 +71,8 @@ elseif level==3
     imageChoiceExample=Screen('MakeTexture',wPtr,imgChoiceExample);
     Instruction{5}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Bijvoorbeeld: als deze keuze is geselecteerd dan hoeft u niet een herhaling van de kleurenwiel taak te doen en ontvangt u 1.00 euro.';
     Instruction{6}='Geef geen gehaaste antwoorden. Het is erg belangrijk dat u denk aan het geld en aan uw ervaring met het doen van de specifieke oefeningen van de taak (d.w.z. het aantal vierkanten en Negeren (N) / Vervangen (V) condities).';
-    Instruction{7}='Het is heel belangrijk dat u kiest wat u echt leuk vindt en niet wat u denkt dat we willen dat u kiest!';
-    Instruction{8}='Als iets onduidelijk is, aarzel dan niet om het aan de onderzoekers te vragen!';
+    Instruction{7}='Als iets onduidelijk is, aarzel dan niet om het aan de onderzoekers te vragen!';
+        et is heel belangrijk dat u kiest wat u echt leuk vindt en niet wat u denkt dat we willen dat je kiest
     
 elseif level==4
     Instruction{1} = 'U hebt de oefenversie volbracht.\n\n U mag nu doorgaan met de keuze taak.';
