@@ -29,7 +29,7 @@ if startOrStop==1 %starting up the Eyelink
     Eyelink('Command','link_event_data = GAZE,VELOCITY');
     Eyelink('Command','saccade_velocity_threshold = 200');
     Eyelink('Command','saccade_motion_threshold = 0.15');
-        Eyelink('Command','pupil_size_data','DIAMETER');
+%         Eyelink('Command','pupil_size_data','DIAMETER');
 
     % do calibration
     EyelinkDoTrackerSetup(el);

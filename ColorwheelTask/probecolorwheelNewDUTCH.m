@@ -1,4 +1,4 @@
-function [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,probeColorCorrect,lureColor,rect,wPtr,g,p,varargin)
+function [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtDecision]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,probeColorCorrect,lureColor,rect,wPtr,g,p,varargin)
 % function that gives the colorwheel for the task and the probe of the colorwheel memory task
 % Takes as inputs the amount of colors displayed on the wheel, the X Y coordinates
 % of the probe rect and the maxRT possible. Colorwheel is constructed by
@@ -116,19 +116,29 @@ drawFixationCross(wPtr,rect)
 
 
 probeOnset = Screen('Flip',wPtr);
+%%%% response collected by coordinates of mouse click
+%show and set the mouse in the center
+
 %                           imageArray=Screen('GetImage',wPtr);
 %                           imwrite(imageArray,sprintf('Probe%d.png',g,p),'png');
 
-%%%% response collected by coordinates of mouse click
 
 % mousePress=0; %indication of no response
 respXAll=[];
 respYAll=[];
 rtAll=[];
-
+movement=0;
+response=0;
 while GetSecs-probeOnset<pms.maxRT %while they did not make a response during the probe response duration
     [~, secs, ~] = KbCheck;
     [x,y,buttons]=GetMouse(wPtr);
+                radiusWheel      = sqrt((x-centerX)^2+(y-centerY)^2);                
+
+    if radiusWheel>25
+        startResponse=GetSecs;
+        rtDecision=startResponse-probeOnset;
+        movement=1;
+            
     mousePress=any(buttons);%response was made
     
     %first response counts, all are recorded
@@ -139,6 +149,7 @@ while GetSecs-probeOnset<pms.maxRT %while they did not make a response during th
         respX=respXAll(1);
         respY=respYAll(1);
         rt=rtAll(1);
+        rtMovement=rt-startResponse;
         [respDif,tau,thetaCorrect,radius]=respDev(colortheta,probeColorCorrect,lureColor,respX,respY,rect); %90 for red responses around 0
         
         for ind=1:length(colors)
@@ -160,7 +171,7 @@ while GetSecs-probeOnset<pms.maxRT %while they did not make a response during th
         end
         %Even if they made response they have to wait maxRT secs.
         %                 WaitSecs(pms.maxRT-rt)
-        
+    end  
     end %if mousePress
     WaitSecs(0.1);
 end %while (mousePress==0...)
@@ -185,8 +196,8 @@ if exist('respX','var')
         
         %feedback if they are +-10 degrees from target color
         if abs(respDif) <=10
-            Screen('TextSize',wPtr,15);
-            message=sprintf('Goed bezig! U week slechts %d graden af van het correcte antwoord.',abs(round(respDif)));
+            Screen('TextSize',wPtr,20);
+            message=sprintf('Goed bezig! \n U week slechts %d graden af van het correcte antwoord.',abs(round(respDif)));
             DrawFormattedText(wPtr, message, 'center', 'center', messageColor);
         else
             %otherwise no feedback
@@ -202,7 +213,7 @@ if exist('respX','var')
             Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
         end
         Screen('FillOval',wPtr,insideRectColor,insideRect);
-        Screen('TextSize',wPtr,15);
+        Screen('TextSize',wPtr,18);
         DrawFormattedText(wPtr, messageWrong, 'center', 'center', messageColor);
         Screen('Flip',wPtr)
         WaitSecs(pms.feedbackDuration);
@@ -215,12 +226,13 @@ elseif ~exist('respX','var')
     respX=NaN;
     respY=NaN;
     rt=NaN;
-    
+    rtMovement=NaN;
+    startResponse=NaN;
     for ind=1:length(colors)
         Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
     end
     Screen('FillOval',wPtr,insideRectColor,insideRect);
-    Screen('TextSize',wPtr,15);
+    Screen('TextSize',wPtr,18);
     DrawFormattedText(wPtr, messageLate, 'center', 'center', messageColor);
     Screen('Flip',wPtr)
     WaitSecs(pms.feedbackDuration);

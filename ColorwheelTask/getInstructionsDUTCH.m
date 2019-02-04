@@ -19,7 +19,8 @@ function getInstructionsDUTCH(level,pms,wPtr)
 HideCursor;
 
 %% Text for level 1. Every cell is a different screen.
-
+Screen('FillRect',wPtr,[200,200,200])
+Screen('Flip',wPtr)
 if level == 1
     
     Instruction{1} = 'Welkom. Dit is de zogeheten kleurenwiel taak.\n U kunt de instructies doorlopen met de linker- en rechterpijltoetsen.\n Druk op de rechterpijltoets om de taak te starten...';
@@ -34,16 +35,16 @@ if level == 1
     imgIgnore=importdata('IgnoreDUTCH.png');
     imageIgnore=Screen('MakeTexture',wPtr,imgIgnore);
     Instruction{8}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld deel 2: NEGEER dit vierkant.';
-    Instruction{9} = 'Maar als de letter een V (VERVANGEN) is, dan moet u ALLEEN het nieuwe vierkant in deel 2 onthouden.';
+    Instruction{9} = 'Maar als de letter een V (VERVANG) is, dan moet u ALLEEN het nieuwe vierkant in deel 2 onthouden.';
     imgUpdate=importdata('UpdateDUTCH.png');
     imageUpdate=Screen('MakeTexture',wPtr,imgUpdate);
-    Instruction{10}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld deel 2: Onthoud dit vierkant in uw geheugen.' ;
+    Instruction{10}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld deel 2: Onthoud nu dit vierkant (VERVANG).' ;
     Instruction{11} = sprintf('Samenvattend: \n\n Deel 1:\n U herinnert telkens de kleur en locatie van het vierkant.\n\n Deel 2:\n Als de letter in het midden een N is:\n dan NEGEERT u de nieuwe kleur in deel 2.\n Als de letter in het midden een V is:\n dan VERVANG u uw geheugen met alleen het nieuwe vierkant.\n\n Deel 3:\n U ziet een kleurenwiel en de rand van een vierkant zonder kleur.\n U moet met de computermuis in het kleurenwiel aangeven welke kleur u diende te onthouden.\n U heeft %d seconden om te reageren.',pms.maxRT);
     imgProbe=importdata('Probe.png');
     imageProbe=Screen('MakeTexture',wPtr,imgProbe);
     Instruction{12}='Klik op de correcte kleur!\n (Nu nog niet, dit is slechts een voorbeeld!)';
     Instruction{13}='Alleen uw eerste antwoord telt. Probeer altijd een antwoord te geven ook als u hiervan niet zeker bent. Probeer daarnaast om zo snel en zo nauwkeurig mogelijk te reageren. Houd uw hand op de computermuis zodat u voldoende tijd heeft om te reageren.';
-    Instruction{14}='Probeer om tijdens de taak altijd naar het scherm te kijken.';
+    Instruction{14}='Blijf steeds naar het scherm kijken dijdens de taak.';
     Instruction{15} ='Samenvattend: \n\n Deel 1:\n U herinnert telkens de kleur en locatie van het vierkant.\n\n Deel 2:\n Als de letter in het midden een N is:\n dan NEGEERT u de nieuwe kleur in deel 2.\n Als de letter in het midden een V is:\n dan VERVANG u uw geheugen met alleen het nieuwe vierkant.\n\n Deel 3: In het kleurenwiel geeft u aan welke kleur u moest herinneren.';
     Instruction{16} = 'We beginnen met slechts 1 vierkant per keer, maar dit kan oplopen tot 3 vierkanten.\n Wanneer meerdere kleuren te zien zijn, probeer dan om alle kleuren en bijbehorende locaties te onthouden.\n\n';
     Instruction{17}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld: deel 1 met 3 kleuren';
@@ -52,23 +53,23 @@ if level == 1
     Instruction{18}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld: deel 2 met 3 kleuren';
     imgUpdate3=importdata('Update3DUTCH.png');
     imageUpdate3=Screen('MakeTexture',wPtr,imgUpdate3);
-    Instruction{19}='Van alle 3 de kleuren die u moet aangeven \n onthoud alleen de kleur van het uitgelichte vierkant.';
-    Instruction{20}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld: kleurenwiel met 3 kleuren';
+    Instruction{19}='Van alle 3 de kleuren die u moet aangeven alleen de kleur van het uitgelichte vierkant.';
+    Instruction{20}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld: kleurenwiel met 3 kleuren';
     imgProbe3=importdata('ProbeSZ3.png');
     imageProbe3=Screen('MakeTexture',wPtr,imgProbe3);
         if pms.trackGaze
-        Instruction{21}='Tijdens deze taak zullen we u oogbewegingen volgen.';
-    Instruction{22}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voordat ieder nieuw deel van de taak begint, ziet u een zwart punt.';
+    Instruction{21}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voordat ieder nieuw deel van de taak begint, ziet u een zwart punt.';
     imgSignal=importdata('Signal.png');    
     imageSignal=Screen('MakeTexture',wPtr,imgSignal);
-            Instruction{23}='Blijf alstublieft naar de punt kijken. \n Als de taak na een paar seconden nog niet is gestart, druk dan op spatie en blijf naar de stip kijken.';
+            Instruction{22}='Blijf alstublieft naar de punt kijken. \n Als de taak na een paar seconden nog niet is gestart, druk dan op spatie en blijf naar de stip kijken.';
+        Instruction{23}='Tijdens deze taak zullen we u oogbewegingen volgen.';
 
-    Instruction{24} = 'Is alles duidelijk?\n\n Het is erg belangrijk dat u dit onderdeel begrijpt. Wij begrijpen dat het in het begin verwarrend kan zijn.\n Maak a.u.b. contact met de onderzoekers, zij zullen de oefening pas starten als al uw vragen zijn beantwoordt.';
+    Instruction{24} = 'Is alles duidelijk?\n\n Het is erg belangrijk dat u dit onderdeel begrijpt. Wij begrijpen dat het in het begin verwarrend kan zijn.\n Maak a.u.b. contact met de onderzoekers, zij zullen de oefening pas starten als al uw vragen zijn beantwoord.';
         else 
             Instruction{21}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voordat ieder nieuw deel van de taak begint, ziet u een zwart punt.';
     imgSignal=importdata('Signal.png');    
     imageSignal=Screen('MakeTexture',wPtr,imgSignal);
-        Instruction{22} = 'Is alles duidelijk?\n\n Het is erg belangrijk dat u dit onderdeel begrijpt. Wij begrijpen dat het in het begin verwarrend kan zijn.\n Maak a.u.b. contact met de onderzoekers, zij zullen de oefening pas starten als al uw vragen zijn beantwoordt.';
+        Instruction{22} = 'Is alles duidelijk?\n\n Het is erg belangrijk dat u dit onderdeel begrijpt. Wij begrijpen dat het in het begin verwarrend kan zijn.\n Maak a.u.b. contact met de onderzoekers, zij zullen de oefening pas starten als al uw vragen zijn beantwoord.';
 
         end
 elseif level == 2

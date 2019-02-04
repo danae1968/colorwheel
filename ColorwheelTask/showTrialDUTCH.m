@@ -24,9 +24,11 @@ function [data,T,varargout] = showTrialDUTCH(trial,pms,practice,dataFilenamePrel
 if practice==1
     pms.numTrials=pms.numTrialsPr;
     pms.numBlocks=pms.numBlocksPr;
+    pms.trackGaze=0;
 elseif practice==2
     pms.numTrials=pms.redoTrials;
     pms.numBlocks=pms.redoBlocks;
+    pms.trackGaze=0;
 end
 
 Screen('TextSize',wPtr,16);
@@ -49,7 +51,14 @@ ovalRect=CenterRectOnPoint(rectTwo,pms.xCenter,pms.yCenter);
 
 %% loop around trials and blocks for stimulus presentation
 for p=1:pms.numBlocks
+    Screen('FillRect',wPtr,pms.background)
+Screen('Flip',wPtr)
+
     if pms.trackGaze
+        myport = IOPort('OpenSerialPort');
+KbStrokeWait
+    [pktdata, treceived] = IOPort('Read', myport, 1, 1);
+IOPort('ConfigureSerialPort')
         driftShift = pms.driftShift;
         pms.el = EyelinkSetup(1,wPtr);
         Eyelink('StartRecording')
@@ -104,7 +113,7 @@ for p=1:pms.numBlocks
                         end
                         
                         time1 = GetSecs();
-                        while ((sample(1)+driftShift(ColorwheelTask1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
+                        while ((sample(1)+driftShift(1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
                             sample = getEyelinkData();
                             time2 = GetSecs();
                             fixOn = time2 - time1;
@@ -384,9 +393,9 @@ for p=1:pms.numBlocks
                 if strcmp(pms.language,'DUTCH')
 
                 if practice==1 || practice==2
-                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
+                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
                 elseif practice==0
-                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
+                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
                 end
                 else
                     if practice==1 || practice==2
@@ -408,6 +417,7 @@ for p=1:pms.numBlocks
                         if pms.trackGaze
                             Eyelink('Stoprecording')
                             pms.el = EyelinkSetup(0,pms);
+                                [pktdata, treceived] = IOPort('Read', myport, 0, 1);
                         end
                     end
                 end
@@ -416,6 +426,8 @@ for p=1:pms.numBlocks
                 data(g,p).rt=rt;
                 data(g,p).respCoordAll=[respXAll respYAll];
                 data(g,p).rtAll=rtAll;
+                data(g,p).rtMovement=rtMovement;
+                data(g,p).rtFirstMove=rtFirstMove;
                 data(g,p).probeLocation=[probeRectX probeRectY];
                 data(g,p).probeColorCorrect=trial(g,p).probeColorCorrect;
                 data(g,p).lureColor=trial(g,p).lureColor;
@@ -425,6 +437,8 @@ for p=1:pms.numBlocks
                 data(g,p).thetaCorrect=thetaCorrect;
                 data(g,p).tau=tau;
                 data(g,p).rect=rect;
+                data(g,p).pktdata=pktdata;
+                data(g,p).treceived=treceived;
                 %                 data(g,p).colPie=trial(g,p).colPie;
                 %add additional information to data
                 data(g,p).setsize = trial(g,p).setSize;

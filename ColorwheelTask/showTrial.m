@@ -104,7 +104,7 @@ for p=1:pms.numBlocks
                         end
                         
                         time1 = GetSecs();
-                        while ((sample(1)+driftShift(ColorwheelTask1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
+                        while ((sample(1)+driftShift(1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
                             sample = getEyelinkData();
                             time2 = GetSecs();
                             fixOn = time2 - time1;
@@ -450,6 +450,7 @@ for p=1:pms.numBlocks
                 T.iti_on(g,p) = GetSecs;
                 WaitSecs(pms.iti)
             end %if phase ==1
+        
         end % for phase 1:6
     end% for p=1:numBlocks
 end  % for g=1:numTrials
