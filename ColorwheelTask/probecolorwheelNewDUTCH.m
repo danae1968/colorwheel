@@ -208,16 +208,16 @@ if exist('respX','var')
     end %if practice=1
     %if they clicked in the inner circle or on the fixation cross they receive feedback to click on the
     %colorwheel
-    if isnan(tau)|| radius<abs(insideRect(1)-insideRect(3))/2
-        for ind=1:length(colors)
-            Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
-        end
-        Screen('FillOval',wPtr,insideRectColor,insideRect);
-        Screen('TextSize',wPtr,18);
-        DrawFormattedText(wPtr, messageWrong, 'center', 'center', messageColor);
-        Screen('Flip',wPtr)
-        WaitSecs(pms.feedbackDuration);
-    end
+%     if isnan(tau)|| radius<abs(insideRect(1)-insideRect(3))/2
+%         for ind=1:length(colors)
+%             Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
+%         end
+%         Screen('FillOval',wPtr,insideRectColor,insideRect);
+%         Screen('TextSize',wPtr,18);
+%         DrawFormattedText(wPtr, messageWrong, 'center', 'center', messageColor);
+%         Screen('Flip',wPtr)
+%         WaitSecs(pms.feedbackDuration);
+%     end
     
 %%if the participant did not respond respX does not exist, so respX, respY and rt
 %are set to NaN. They receive feedback to respond faster. 

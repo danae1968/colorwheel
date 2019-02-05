@@ -1,4 +1,4 @@
-function [data, trial, T] = BeautifulColorwheel(varargin)
+function [data, trial, T,gazedata] = BeautifulColorwheel(varargin)
 % Colorhwheel
 %
 % This function presents the colorwheel task - here: part 1 of the QuantifyingCC study
