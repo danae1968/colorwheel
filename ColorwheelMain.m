@@ -15,7 +15,10 @@ if ~exist(logdir,'dir')
 end
 
 runVersion2=0;
+runColorVision=0;
+runColorwheelPr=0;
 runColorwheel=0;
+runChoicePr=0;
 runChoice=0;
 runRedo=0;
 
@@ -36,18 +39,34 @@ else
     errordlg('Caution! Participant file name already exists!','Filename exists');
     return
 end
-if runColorwheel
-cd(cwdir)
-disp('TASK 1: Colorwheel');          % display which task starts.
-WaitSecs(2)
 
+%% color vision test
+    pms.background          = [128,128,128];
+    pms.subNo = subNo;
+    pms.colorDir= subDir;
+    pms.numWheelColors=512;
+    pms.colorTrials=12; %trials for color naming task
+cd(cwdir)
+
+if runColorVision
+    disp('TASK 1: Colorwheel');          % display which task starts.
+        WaitSecs(2)
+    colorVisionDUTCH(pms,wPtr,rect)
+end
+
+if runColorwheelPr
+cd(cwdir)
  BeautifulColorwheel(subNo,1,subdir) %practice=1
+end
+
+if runColorwheel
+    cd(cwdir)
 BeautifulColorwheel(subNo,0,subdir) %practice=0
 
 cd(rootdir)
 end
 %% choice task
-if runChoice
+if runChoicePr
 chdir           = fullfile(rootdir,'ChoiceTask');
 
 if ~exist(logdir,'dir')
@@ -73,12 +92,16 @@ end
 
 cd(chdir)
 BeautifulChoices(subNo,1,subdirCh);%practice=1
+end
+
+if runChoice
 if runVersion2==0
 [~,choiceSZ, choiceCondition, bonus]=BeautifulChoices(subNo,0,subdirCh);%actual choice task
 elseif runVersion2==1
   [~,choiceSZ, choiceCondition, bonus]=BeautifulChoices2(subNo,0,subdirCh);%actual choice task
 end  
 end
+
 %% redo of colorwheel task
 if runRedo
  

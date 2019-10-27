@@ -1,18 +1,18 @@
-function [colorTestData]=colorVisionDUTCH(pms,wPtr,rect)
+function [colorTestData]=colorVisionDUTCH(pms)
 
 %%%function that shows randomly selected colors and checks for color
 %%%perception
 
-% Screen('Preference', 'VisualDebugLevel',0);
-% Screen('Preference','SkipSyncTests',1); 
-% Screen('Preference', 'SuppressAllWarnings', 1);
+Screen('Preference', 'VisualDebugLevel',0);
+Screen('Preference','SkipSyncTests',1); 
+Screen('Preference', 'SuppressAllWarnings', 1);
 
-% [wPtr,rect]=Screen('Openwindow',max(Screen('Screens')));
+[wPtr,rect]=Screen('Openwindow',max(Screen('Screens')));
 
 
-% Screen('TextSize',wPtr,24);
-% Screen('TextStyle',wPtr,1);
-% Screen('TextFont',wPtr,'Times New Roman');
+Screen('TextSize',wPtr,24);
+Screen('TextStyle',wPtr,1);
+Screen('TextFont',wPtr,'Times New Roman');
 
 numTrials=pms.colorTrials;
 rectOne=[0 0 100 100];

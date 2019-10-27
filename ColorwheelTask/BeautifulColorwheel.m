@@ -55,13 +55,9 @@ try
 
     %% set experiment parameters
     pms.language='DUTCH';
-<<<<<<< HEAD
     pms.myPort='COM1';
     pms.baudrate=115200;
     pms.trackGaze=0;
-=======
-    pms.trackGaze=1;
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
     pms.numTrials = 32; % adaptable; important to be dividable by 2 (conditions) and multiple of 4 (set size)
     pms.numBlocks = 2;
     pms.Ign1Tr = char(hex2dec('6931'));
@@ -206,13 +202,13 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
     Screen('TextStyle',wPtr,pms.textStyle);
     Screen('TextFont',wPtr,pms.textFont);
   %% Color vision task
-  if practice==1
-      if strcmp(pms.language,'DUTCH')
-          colorVisionDUTCH(pms,wPtr,rect)
-      else
-   colorVision(pms,wPtr,rect)
-      end
-  end
+%   if practice==1
+%       if strcmp(pms.language,'DUTCH')
+%           colorVisionDUTCH(pms,wPtr,rect)
+%       else
+%    colorVision(pms,wPtr,rect)
+%       end
+%   end
     %% Experiment starts with instructions
     %%%%%%% get instructions
     % show instructions
