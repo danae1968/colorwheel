@@ -14,9 +14,11 @@ if ~exist(logdir,'dir')
     mkdir(rootdir,'Log');
 end
 
+runVersion2=0;
 runColorwheel=0;
-runChoice=1;
-runRedo=1;
+runChoice=0;
+runRedo=0;
+
 rng('shuffle')
 %% colorwheel memory task
 colordir=fullfile(logdir,'Colorwheel');
@@ -39,7 +41,7 @@ cd(cwdir)
 disp('TASK 1: Colorwheel');          % display which task starts.
 WaitSecs(2)
 
-BeautifulColorwheel(subNo,1,subdir) %practice=1
+ BeautifulColorwheel(subNo,1,subdir) %practice=1
 BeautifulColorwheel(subNo,0,subdir) %practice=0
 
 cd(rootdir)
@@ -70,11 +72,14 @@ end
 %%% choice task main script
 
 cd(chdir)
-BeautifulChoices(subNo,1,subdirCh);
-[~,choiceSZ, choiceCondition, bonus]=BeautifulChoices(subNo,0,subdirCh);
+BeautifulChoices(subNo,1,subdirCh);%practice=1
+if runVersion2==0
+[~,choiceSZ, choiceCondition, bonus]=BeautifulChoices(subNo,0,subdirCh);%actual choice task
+elseif runVersion2==1
+  [~,choiceSZ, choiceCondition, bonus]=BeautifulChoices2(subNo,0,subdirCh);%actual choice task
+end  
 end
 %% redo of colorwheel task
 if runRedo
-cd(cwdir)
-BeautifulColorwheel(subNo,2,subdir,choiceSZ,choiceCondition,bonus)
-end
+ 
+ end

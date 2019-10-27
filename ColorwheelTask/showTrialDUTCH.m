@@ -24,9 +24,11 @@ function [data,T,varargout] = showTrialDUTCH(trial,pms,practice,dataFilenamePrel
 if practice==1
     pms.numTrials=pms.numTrialsPr;
     pms.numBlocks=pms.numBlocksPr;
+    pms.trackGaze=0;
 elseif practice==2
     pms.numTrials=pms.redoTrials;
     pms.numBlocks=pms.redoBlocks;
+    pms.trackGaze=0;
 end
 
 Screen('TextSize',wPtr,16);
@@ -49,11 +51,20 @@ ovalRect=CenterRectOnPoint(rectTwo,pms.xCenter,pms.yCenter);
 
 %% loop around trials and blocks for stimulus presentation
 for p=1:pms.numBlocks
+    Screen('FillRect',wPtr,pms.background)
+    Screen('Flip',wPtr)
+    
     if pms.trackGaze
+        % KbStrokeWait
+        %     [pktdata, treceived] = IOPort('Read', myport, 1, 1);
+        % IOPort('ConfigureSerialPort')
         driftShift = pms.driftShift;
         pms.el = EyelinkSetup(1,wPtr);
         Eyelink('StartRecording')
         Screen('Flip',wPtr)
+        pms.portHandle=IOPort('OpenSerialport', pms.myPort, sprintf(' BaudRate=%i',pms.baudrate));
+        
+        
     end
     for g=1:pms.numTrials
         
@@ -104,7 +115,7 @@ for p=1:pms.numBlocks
                         end
                         
                         time1 = GetSecs();
-                        while ((sample(1)+driftShift(ColorwheelTask1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
+                        while ((sample(1)+driftShift(1))-rect(3)/2)^2+((sample(2)+driftShift(2))-rect(4)/2)^2 < pms.diagTol^2 && fixOn < pms.fixDuration %euclidean norm to calculate radius of gaze
                             sample = getEyelinkData();
                             time2 = GetSecs();
                             fixOn = time2 - time1;
@@ -157,23 +168,41 @@ for p=1:pms.numBlocks
                         if pms.trackGaze
                             switch trial(g,p).type
                                 case 0
-                                    [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationIgn);
+                                    switch trial(g,p).setSize
+                                        case 1
+                                            [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationIgn);
+                                            IOPort('Write', pms.portHandle, pms.Ign1Tr);
+                                            IOPort('Purge', pms.portHandle);
+                                        case 3
+                                            [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationIgn);
+                                            IOPort('Write', pms.portHandle, pms.Ign3Tr);
+                                            IOPort('Purge', pms.portHandle);
+                                    end
                                 case 2
-                                    [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationUpd);
+                                    switch trial(g,p).setSize
+                                        case 1
+                                            [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationUpd);
+                                            IOPort('Write', pms.portHandle, pms.Upd1Tr);
+                                            IOPort('Purge', pms.portHandle);
+                                        case 3
+                                            [itrack_encoding] = sampleGaze(driftShift,T.encoding_on(g,p),pms.encDurationUpd);
+                                            IOPort('Write', pms.portHandle, pms.Upd3Tr);
+                                            IOPort('Purge', pms.portHandle);
+                                    end
                             end
                         else
-                        
-%                                                                          imageArray=Screen('GetImage',wPtr);
-%                                                                         imwrite(imageArray,sprintf('Encoding%d%dDUTCH.png',g,p),'png');
-                        
-                        
-                        
-                        switch trial(g,p).type
-                            case 0
-                                WaitSecs(pms.encDurationIgn);
-                            case 2
-                                WaitSecs(pms.encDurationUpd);
-                        end
+                            
+                            %                                                                          imageArray=Screen('GetImage',wPtr);
+                            %                                                                         imwrite(imageArray,sprintf('Encoding%d%dDUTCH.png',g,p),'png');
+                            
+                            
+                            
+                            switch trial(g,p).type
+                                case 0
+                                    WaitSecs(pms.encDurationIgn);
+                                case 2
+                                    WaitSecs(pms.encDurationUpd);
+                            end
                         end
                         T.encoding_off(g,p) = GetSecs;
                         
@@ -187,24 +216,29 @@ for p=1:pms.numBlocks
                 % %                         imwrite(imageArray,sprintf('Delay%d%d.png',g,p),'png');
                 T.delay1_on(g,p) = GetSecs;
                 
-                if practice==1 || practice==2
+                   if practice==1 || practice==2
                     WaitSecs(pms.delay1DurationPr)
                 else
-                    switch nargin   %number of arguments
-                        case 6      % 6 arguments in showTrial function:
+                    
+                                if pms.trackGaze
+                                    switch trial(g,p).type
+                                case 0
                             
+                            [itrack_delay1] = sampleGaze(driftShift,T.delay1_on(g,p),pms.delay1DurationIgn);
+                            
+                                        case 2
+                             [itrack_delay1] = sampleGaze(driftShift,T.delay1_on(g,p),pms.delay1DurationUpd);
+                                    end
+                        else
+                           
                             switch trial(g,p).type
                                 case 0
                                     WaitSecs(pms.delay1DurationIgn);
                                 case 2
                                     WaitSecs(pms.delay1DurationUpd);
                             end
-                            
-                        case 7      % 7 arguments in showTrial function:
-                            if varargin{1}==1   %and variable argument is 1 (manipulation)
-                                WaitSecs(trial(g,p).delay1)     %use predefined delays in trial.mat
-                            end
-                    end
+                   
+                                end
                 end
                 T.delay1_off(g,p) = GetSecs;
                 
@@ -246,18 +280,18 @@ for p=1:pms.numBlocks
                         Screen('FillRect',wPtr,colorInt,allRects);
                         DrawFormattedText(wPtr, IgnSymbol, 'center', 'center', I_color);
                         T.I_ignore_on(g,p) =    Screen('Flip',wPtr);
-                     
-                         if pms.trackGaze
-                    
-                                    [itrack_interference] = sampleGaze(driftShift,T.I_ignore_on(g,p),pms.interfDurationIgn);
-                         
-                    
-                         else
-%                         
-%                                                                             imageArray=Screen('GetImage',wPtr);
-%                                                                             imwrite(imageArray,sprintf('InterI%d%dDUTCH.png',g,p),'png');
-                        WaitSecs(pms.interfDurationIgn);
-                         end
+                        
+                        if pms.trackGaze
+                            
+                            [itrack_interference] = sampleGaze(driftShift,T.I_ignore_on(g,p),pms.interfDurationIgn);
+                            
+                            
+                        else
+                            %
+                            %                                                                             imageArray=Screen('GetImage',wPtr);
+                            %                                                                             imwrite(imageArray,sprintf('InterI%d%dDUTCH.png',g,p),'png');
+                            WaitSecs(pms.interfDurationIgn);
+                        end
                         T.I_ignore_off(g,p) = GetSecs;
                         
                     case 2 %Inteference Update
@@ -294,17 +328,17 @@ for p=1:pms.numBlocks
                         DrawFormattedText(wPtr, UpdSymbol, 'center', 'center', U_color);
                         T.I_update_on(g,p) = Screen('Flip',wPtr);
                         
-                                   if pms.trackGaze
-                    
-                                    [itrack_interference] = sampleGaze(driftShift,T.I_update_on(g,p),pms.interfDurationUpd);
-                         
-                    
-                                   else
-                        
-%                                                                             imageArray=Screen('GetImage',wPtr);
-%                                                                             imwrite(imageArray,sprintf('InterU%d%dDUTCH.png',g,p),'png');
-                  WaitSecs(pms.interfDurationUpd);
-                                   end                        
+                        if pms.trackGaze
+                            
+                            [itrack_interference] = sampleGaze(driftShift,T.I_update_on(g,p),pms.interfDurationUpd);
+                            
+                            
+                        else
+                            
+                            %                                                                             imageArray=Screen('GetImage',wPtr);
+                            %                                                                             imwrite(imageArray,sprintf('InterU%d%dDUTCH.png',g,p),'png');
+                            WaitSecs(pms.interfDurationUpd);
+                        end
                         T.I_update_off(g,p) = GetSecs;
                         
                         
@@ -382,17 +416,17 @@ for p=1:pms.numBlocks
                 end %if practice==1
                 
                 if strcmp(pms.language,'DUTCH')
-
-                if practice==1 || practice==2
-                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
-                elseif practice==0
-                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
-                end
+                    
+                    if practice==1 || practice==2
+                        [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
+                    elseif practice==0
+                        [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
+                    end
                 else
                     if practice==1 || practice==2
-                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
-                elseif practice==0
-                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
+                        [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
+                    elseif practice==0
+                        [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
                     end
                 end
                 [respDif,tau,thetaCorrect,radius,lureDif]=respDev(colortheta,trial(g,p).probeColorCorrect,trial(g,p).lureColor,respX,respY,rect);
@@ -408,6 +442,9 @@ for p=1:pms.numBlocks
                         if pms.trackGaze
                             Eyelink('Stoprecording')
                             pms.el = EyelinkSetup(0,pms);
+                            IOPort('Close', pms.portHandle);
+                            
+                            %                                 [pktdata, treceived] = IOPort('Read', myport, 0, 1);
                         end
                     end
                 end
@@ -416,6 +453,8 @@ for p=1:pms.numBlocks
                 data(g,p).rt=rt;
                 data(g,p).respCoordAll=[respXAll respYAll];
                 data(g,p).rtAll=rtAll;
+                data(g,p).rtDecision=rtMovement;
+                data(g,p).rtFirstMove=rtFirstMove;
                 data(g,p).probeLocation=[probeRectX probeRectY];
                 data(g,p).probeColorCorrect=trial(g,p).probeColorCorrect;
                 data(g,p).lureColor=trial(g,p).lureColor;
@@ -425,6 +464,8 @@ for p=1:pms.numBlocks
                 data(g,p).thetaCorrect=thetaCorrect;
                 data(g,p).tau=tau;
                 data(g,p).rect=rect;
+                %                 data(g,p).pktdata=pktdata;
+                %                 data(g,p).treceived=treceived;
                 %                 data(g,p).colPie=trial(g,p).colPie;
                 %add additional information to data
                 data(g,p).setsize = trial(g,p).setSize;
@@ -439,7 +480,9 @@ for p=1:pms.numBlocks
                     %                     gazedata(g,p).probe = itrack_probe; % save all eyetracker data here
                     pms.driftShift = driftShift; % update for next trial
                     gazedata(g,p).encoding=itrack_encoding;
-                     gazedata(g,p).interference=itrack_interference;
+                    gazedata(g,p).interference=itrack_interference;
+                                        gazedata(g,p).delay1=itrack_delay1;
+
                     varargout{3}=gazedata;
                 end
                 if practice==0

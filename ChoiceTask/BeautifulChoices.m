@@ -60,7 +60,7 @@ try
     pms.numChoices=pms.numChoices1+pms.numChoices2; %total number of choices
 
     %%practice
-    pms.repsPrac=1; %repetitions for practice if we want to vary the offers
+    pms.repsPrac=2; %repetitions for practice if we want to vary the offers
    % pms.stepPrac=0.8; % if we want to have varying offers 
 %     pms.easyOffer1Prac=pms.min:pms.stepPrac:pms.max1;
 %     pms.easyOffer2Prac=pms.min:pms.stepPrac:pms.max2;

@@ -5,7 +5,7 @@ function [data] = showChoiceTrialFixedDUTCH(pms, data, wPtr,rect, dataFilenamePr
 %% What we need
 % 1) general locations on screen
 xlength = rect(3); %screen length x
-ylength = rect(4); %screen height y
+ylength = rect(4); %screen he44444ight y
 %define left centre (LC) and right centre (RC)
 LC = [xlength/4, ylength/2];
 RC = [xlength*(3/4), ylength/2];
@@ -42,7 +42,7 @@ for trial = 1:length(data.trialNumber)
                 case 1   % setsize 1 for Direct comparison and IGNORE 1 for No redo version
                     switch data.version(trial)
                         case 1
-                            msgTypeL='Niet opnieuw';
+                            msgTypeL='Geen taak';
                             msgTypeR='Negeer 1';
                         case 2
                             msgTypeL='Vervang 1';
@@ -53,7 +53,7 @@ for trial = 1:length(data.trialNumber)
                 case 2                % setsize 2 or Negeer 2
                     switch data.version(trial)
                         case 1
-                            msgTypeL='Niet opnieuw';
+                            msgTypeL='Geen taak';
                             msgTypeR='Negeer 2';
                         case 2
                             msgTypeL='Vervang 2';
@@ -62,7 +62,7 @@ for trial = 1:length(data.trialNumber)
                 case 3                % setsize 4
                     switch data.version(trial)
                         case 1
-                            msgTypeL='Niet opnieuw';
+                            msgTypeL='Geen taak';
                             msgTypeR='Negeer 3';
                         case 2
                             msgTypeL='Vervang 3';
@@ -72,7 +72,7 @@ for trial = 1:length(data.trialNumber)
                 case 4 % set size 4 or Negeer 4
                     switch data.version(trial)
                         case 1
-                            msgTypeL='Niet opnieuw';
+                            msgTypeL='Geen taak';
                             msgTypeR='Negeer 4';
                         case 2
                             msgTypeL='Vervang 4';
@@ -80,22 +80,22 @@ for trial = 1:length(data.trialNumber)
                     end
                 case 5 %Update 1
                     
-                    msgTypeL='Niet opnieuw';
+                    msgTypeL='Geen taak';
                     msgTypeR='Vervang 1';
                     
                 case 6 % Update 2
                     
-                    msgTypeL='Niet opnieuw';
+                    msgTypeL='Geen taak';
                     msgTypeR='Vervang 2';
                     
                     
                 case 7 % Update 3
                     
-                    msgTypeL='Niet opnieuw';
+                    msgTypeL='Geen taak';
                     msgTypeR='Vervang 3';
                     
                 case 8 %Vervang 4
-                    msgTypeL='Niet opnieuw';
+                    msgTypeL='Geen taak';
                     msgTypeR='Vervang 4';
                     
             end %switch typeTask
@@ -110,7 +110,7 @@ for trial = 1:length(data.trialNumber)
                 case 1   % setsize 1 for Direct comparison and IGNORE 1 for No redo version
                     switch data.version(trial)
                         case 1
-                            msgTypeR='Niet opnieuw';
+                            msgTypeR='Geen taak';
                             msgTypeL='Negeer 1';
                         case 2
                             msgTypeR='Vervang 1';
@@ -121,7 +121,7 @@ for trial = 1:length(data.trialNumber)
                 case 2                % setsize 2 or Ignore 2
                     switch data.version(trial)
                         case 1
-                            msgTypeR='Niet opnieuw';
+                            msgTypeR='Geen taak';
                             msgTypeL='Negeer 2';
                         case 2
                             msgTypeR='Vervang 2';
@@ -130,7 +130,7 @@ for trial = 1:length(data.trialNumber)
                 case 3                % setsize 4
                     switch data.version(trial)
                         case 1
-                            msgTypeR='Niet opnieuw';
+                            msgTypeR='Geen taak';
                             msgTypeL='Negeer 3';
                         case 2
                             msgTypeR='Vervang 3';
@@ -140,7 +140,7 @@ for trial = 1:length(data.trialNumber)
                 case 4 % set size 4 or Ignore 4
                     switch data.version(trial)
                         case 1
-                            msgTypeR='Niet opnieuw';
+                            msgTypeR='Geen taak';
                             msgTypeL='Negeer 4';
                         case 2
                             msgTypeR='Vervang 4';
@@ -148,22 +148,22 @@ for trial = 1:length(data.trialNumber)
                     end
                 case 5 %Update 1
                     
-                    msgTypeR='Niet opnieuw';
+                    msgTypeR='Geen taak';
                     msgTypeL='Vervang 1';
                     
                 case 6 % Update 2
                     
-                    msgTypeR='Niet opnieuw';
+                    msgTypeR='Geen taak';
                     msgTypeL='Vervang 2';
                     
                     
                 case 7 % Update 3
                     
-                    msgTypeR='Niet opnieuw';
+                    msgTypeR='Geen taak';
                     msgTypeL='Vervang 3';
                     
                 case 8 %Update 4
-                    msgTypeR='Niet opnieuw';
+                    msgTypeR='Geen taak';
                     msgTypeL='Vervang 4';
                     
             end %switch typeTask
@@ -189,12 +189,12 @@ for trial = 1:length(data.trialNumber)
     key=[];
     responded = [];
     choiceRTAll=[];
-    while (GetSecs - offerOnset) < pms.maxRT
+%     while (GetSecs - offerOnset) < pms.maxRT
         % check keyboard
         RestrictKeysForKbCheck([pms.allowedResps.left, pms.allowedResps.right,37,39,32,97,98])
-        [keyIsDown, secs, keyCode] = KbCheck;
+        [ secs, keyCode] = KbWait;
         WaitSecs(0.1);
-        if keyIsDown==1
+%         if keyIsDown==1
             % a response has just occurred
             %key = [KbName(keyCode),num2str(evt.state)];
             if any(ismember(KbName(keyCode),[pms.allowedResps.left, pms.allowedResps.right]))
@@ -229,7 +229,7 @@ for trial = 1:length(data.trialNumber)
             end
                 RestrictKeysForKbCheck([])
 
-        end %key is down
+%         end %key is down
         %         WaitSecs(.001);
             %% present feedback
     DrawFormattedText(wPtr,msgTypeR , RC(1)-100,RC(2)-60);
@@ -241,11 +241,11 @@ for trial = 1:length(data.trialNumber)
     Screen('Flip',wPtr,[],1);
 %                 imageArray=Screen('GetImage',wPtr);
 %                 imwrite(imageArray,sprintf('ChoiceMade%dDUTCH.png',trial),'png');
-%     WaitSecs(0.5) 
+    WaitSecs(0.5) 
         
         
         
-    end %while is empty responded
+%     end %while is empty responded
     
     %check to see if participant is too slow
     if isempty(responded)

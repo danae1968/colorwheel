@@ -136,7 +136,8 @@ end
 
 
       if abs(respDif) <=10
-        message2=sprintf('Goed bezig! U week slechts %d graden af van het correcte antwoord.',abs(round(respDif)));
+              Screen('TextSize',wPtr,18);
+        message2=sprintf('Goed bezig! \n U week slechts %d graden af van het correcte antwoord.',abs(round(respDif)));
         DrawFormattedText(wPtr, message2, 'center', 'center', [0 0 0]);
          else
       %otherwise no feedback

@@ -1,4 +1,4 @@
-function [data, trial, T] = BeautifulColorwheel(varargin)
+function [data, trial, T,gazedata] = BeautifulColorwheel(varargin)
 % Colorhwheel
 %
 % This function presents the colorwheel task - here: part 1 of the QuantifyingCC study
@@ -55,13 +55,19 @@ try
 
     %% set experiment parameters
     pms.language='DUTCH';
+    pms.myPort='COM1';
+    pms.baudrate=115200;
     pms.trackGaze=0;
     pms.numTrials = 32; % adaptable; important to be dividable by 2 (conditions) and multiple of 4 (set size)
     pms.numBlocks = 2;
-
+    pms.Ign1Tr = char(hex2dec('6931'));
+    pms.Ign3Tr = char(hex2dec('6933'));
+    pms.Upd1Tr = char(hex2dec('7531'));
+    pms.Upd3Tr = char(hex2dec('7533'));
+    
     pms.numCondi = 2;  % 0 IGNORE, 2 UPDATE
     pms.numTrialsPr=8; %trials for practice
-    pms.numBlocksPr=1; %blocks for practice
+    pms.numBlocksPr=2; %blocks for practice
     pms.redoTrials=24; %trials for Redo
     pms.redoBlocks=1; %blocks for Redo
     pms.setsize=[1 3]; %maximum number of squares used
@@ -73,7 +79,7 @@ try
     
     %text
     pms.textColor           = [0 0 0];
-    pms.background          = [200,200,200];
+    pms.background          = [128,128,128];
     pms.wrapAt              = 65;
     pms.spacing             = 2;
     pms.textSize            = 22;
@@ -90,7 +96,7 @@ try
     pms.fixDuration = 0.75; % required fixation duration in seconds before trials initiate
     pms.diagTol = 100; % diagonal pixels of tolerance for fixation
     % timings
-    pms.maxRT = 4; % max RT
+    pms.maxRT = 5; % max RT
     pms.encDuration = 2;    %2 seconds of encoding
     pms.encDurationIgn=2;
     pms.encDurationUpd=2;
@@ -105,10 +111,10 @@ try
     pms.delay2DurationIgn=2;
     pms.delay2DurationUpd=6;
     pms.feedbackDuration=0.5; %feedback during colorwheel
-    pms.feedbackDurationPr=0.7;
+    pms.feedbackDurationPr=1.5;
     pms.jitter = 0;
     pms.iti=0.1;
-    pms.signal=0.5;
+    pms.signal=0.8;
     pms.driftShift = [0,0]; % how much to adjust [x,y] for pupil drift, updated every trial
     pms.driftCueCol = [10 150 10, 255]; % cue that central fix changes when drifting is indicated
 pms.trialDurationIgn=pms.encDurationIgn+pms.delay1DurationIgn+pms.interfDurationIgn+pms.delay2DurationIgn+pms.maxRT+pms.feedbackDuration;
@@ -238,13 +244,13 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
     % showTrial: in this function, the trials are defined and looped
     if strcmp(pms.language,'DUTCH')
   
-          if pms.trackGaze
+          if pms.trackGaze && practice==0
     [data, T, gazedata] = showTrialDUTCH(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
     else
             [data, T] = showTrialDUTCH(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
           end
     else
-    if pms.trackGaze
+    if pms.trackGaze && practice==0
     [data, T, gazedata] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
     else
             [data, T] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
@@ -284,7 +290,7 @@ end
    end
 catch ME
     disp(getReport(ME));
-@    keyboard
+   keyboard
     
     % save data
     save(fullfile(pms.colordir,dataFilename));
