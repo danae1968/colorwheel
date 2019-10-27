@@ -1,4 +1,4 @@
-function [data, trial, T,gazedata] = BeautifulColorwheel(varargin)
+function [data, trial, T] = BeautifulColorwheel(varargin)
 % Colorhwheel
 %
 % This function presents the colorwheel task - here: part 1 of the QuantifyingCC study
@@ -55,20 +55,10 @@ try
 
     %% set experiment parameters
     pms.language='DUTCH';
-<<<<<<< HEAD
-    pms.myPort='COM1';
-    pms.baudrate=115200;
-    pms.trackGaze=0;
-=======
     pms.trackGaze=1;
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
     pms.numTrials = 32; % adaptable; important to be dividable by 2 (conditions) and multiple of 4 (set size)
     pms.numBlocks = 2;
-    pms.Ign1Tr = char(hex2dec('6931'));
-    pms.Ign3Tr = char(hex2dec('6933'));
-    pms.Upd1Tr = char(hex2dec('7531'));
-    pms.Upd3Tr = char(hex2dec('7533'));
-    
+
     pms.numCondi = 2;  % 0 IGNORE, 2 UPDATE
     pms.numTrialsPr=8; %trials for practice
     pms.numBlocksPr=2; %blocks for practice
@@ -100,7 +90,7 @@ try
     pms.fixDuration = 0.75; % required fixation duration in seconds before trials initiate
     pms.diagTol = 100; % diagonal pixels of tolerance for fixation
     % timings
-    pms.maxRT = 5; % max RT
+    pms.maxRT = 4; % max RT
     pms.encDuration = 2;    %2 seconds of encoding
     pms.encDurationIgn=2;
     pms.encDurationUpd=2;
@@ -248,13 +238,13 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
     % showTrial: in this function, the trials are defined and looped
     if strcmp(pms.language,'DUTCH')
   
-          if pms.trackGaze && practice==0
+          if pms.trackGaze
     [data, T, gazedata] = showTrialDUTCH(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
     else
             [data, T] = showTrialDUTCH(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
           end
     else
-    if pms.trackGaze && practice==0
+    if pms.trackGaze
     [data, T, gazedata] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 
     else
             [data, T] = showTrial(trial, pms,practice,dataFilenamePrelim,wPtr,rect); 

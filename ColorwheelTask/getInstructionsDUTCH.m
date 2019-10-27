@@ -44,7 +44,11 @@ if level == 1
     imageProbe=Screen('MakeTexture',wPtr,imgProbe);
     Instruction{12}='Klik op de correcte kleur!\n (Nu nog niet, dit is slechts een voorbeeld!)';
     Instruction{13}='Alleen uw eerste antwoord telt. Probeer altijd een antwoord te geven ook als u hiervan niet zeker bent. Probeer daarnaast om zo snel en zo nauwkeurig mogelijk te reageren. Houd uw hand op de computermuis zodat u voldoende tijd heeft om te reageren.';
+<<<<<<< HEAD
     Instruction{14}='Blijf steeds naar het scherm kijken tijdens de taak.';
+=======
+    Instruction{14}='Blijf steeds naar het scherm kijken dijdens de taak.';
+>>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
     Instruction{15} ='Samenvattend: \n\n Deel 1:\n U herinnert telkens de kleur en locatie van het vierkant.\n\n Deel 2:\n Als de letter in het midden een N is:\n dan NEGEERT u de nieuwe kleur in deel 2.\n Als de letter in het midden een V is:\n dan VERVANG u uw geheugen met alleen het nieuwe vierkant.\n\n Deel 3: In het kleurenwiel geeft u aan welke kleur u moest herinneren.';
     Instruction{16} = 'We beginnen met slechts 1 vierkant per keer, maar dit kan oplopen tot 3 vierkanten.\n Wanneer meerdere kleuren te zien zijn, probeer dan om alle kleuren en bijbehorende locaties te onthouden.\n\n';
     Instruction{17}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld: deel 1 met 3 kleuren';

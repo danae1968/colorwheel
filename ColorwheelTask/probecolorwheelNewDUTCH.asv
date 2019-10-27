@@ -1,4 +1,4 @@
-function [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtDecision]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,probeColorCorrect,lureColor,rect,wPtr,g,p,varargin)
+function [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,probeColorCorrect,lureColor,rect,wPtr,g,p,varargin)
 % function that gives the colorwheel for the task and the probe of the colorwheel memory task
 % Takes as inputs the amount of colors displayed on the wheel, the X Y coordinates
 % of the probe rect and the maxRT possible. Colorwheel is constructed by
@@ -116,13 +116,13 @@ drawFixationCross(wPtr,rect)
 
 
 probeOnset = Screen('Flip',wPtr);
-%%%% response collected by coordinates of mouse click
-%show and set the mouse in the center
-
 %                           imageArray=Screen('GetImage',wPtr);
 %                           imwrite(imageArray,sprintf('Probe%d.png',g,p),'png');
 
-
+%%%% response collected by coordinates of mouse click
+%show and set the mouse in the center
+ShowCursor('Arrow');
+SetMouse(centerX,centerY,wPtr);
 % mousePress=0; %indication of no response
 respXAll=[];
 respYAll=[];
@@ -132,9 +132,9 @@ response=0;
 while GetSecs-probeOnset<pms.maxRT %while they did not make a response during the probe response duration
     [~, secs, ~] = KbCheck;
     [x,y,buttons]=GetMouse(wPtr);
-                radiusWheel      = sqrt((x-centerX)^2+(y-centerY)^2);                
+                radius      = sqrt((x-centerX)^2+(y-centerY)^2);                
 
-    if radiusWheel>25
+    if radius>25
         startResponse=GetSecs;
         rtDecision=startResponse-probeOnset;
         movement=1;
@@ -196,7 +196,7 @@ if exist('respX','var')
         
         %feedback if they are +-10 degrees from target color
         if abs(respDif) <=10
-            Screen('TextSize',wPtr,20);
+            Screen('TextSize',wPtr,16);
             message=sprintf('Goed bezig! \n U week slechts %d graden af van het correcte antwoord.',abs(round(respDif)));
             DrawFormattedText(wPtr, message, 'center', 'center', messageColor);
         else
@@ -208,16 +208,16 @@ if exist('respX','var')
     end %if practice=1
     %if they clicked in the inner circle or on the fixation cross they receive feedback to click on the
     %colorwheel
-%     if isnan(tau)|| radius<abs(insideRect(1)-insideRect(3))/2
-%         for ind=1:length(colors)
-%             Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
-%         end
-%         Screen('FillOval',wPtr,insideRectColor,insideRect);
-%         Screen('TextSize',wPtr,18);
-%         DrawFormattedText(wPtr, messageWrong, 'center', 'center', messageColor);
-%         Screen('Flip',wPtr)
-%         WaitSecs(pms.feedbackDuration);
-%     end
+    if isnan(tau)|| radius<abs(insideRect(1)-insideRect(3))/2
+        for ind=1:length(colors)
+            Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
+        end
+        Screen('FillOval',wPtr,insideRectColor,insideRect);
+        Screen('TextSize',wPtr,15);
+        DrawFormattedText(wPtr, messageWrong, 'center', 'center', messageColor);
+        Screen('Flip',wPtr)
+        WaitSecs(pms.feedbackDuration);
+    end
     
 %%if the participant did not respond respX does not exist, so respX, respY and rt
 %are set to NaN. They receive feedback to respond faster. 
@@ -226,17 +226,12 @@ elseif ~exist('respX','var')
     respX=NaN;
     respY=NaN;
     rt=NaN;
-    rtMovement=NaN;
-<<<<<<< HEAD
-    rtDecision=NaN;
-=======
-    startResponse=NaN;
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
+    
     for ind=1:length(colors)
         Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
     end
     Screen('FillOval',wPtr,insideRectColor,insideRect);
-    Screen('TextSize',wPtr,18);
+    Screen('TextSize',wPtr,15);
     DrawFormattedText(wPtr, messageLate, 'center', 'center', messageColor);
     Screen('Flip',wPtr)
     WaitSecs(pms.feedbackDuration);
