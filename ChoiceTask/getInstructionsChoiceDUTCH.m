@@ -40,45 +40,44 @@ Screen('TextFont',wPtr,'Times New Roman');
 
 if level == 1
     
-    Instruction{1} = 'Welkom bij de keuze taak!\n U kunt door de instructies gaan met de linker- en rechterpijltoetsen.\n Klik op de rechterpijltoets om verder te gaan.';
-    Instruction{2} = 'Tijdens dit onderdeel kunt u een beloning krijgen als u ervoor kiest om een paar extra blokken van de kleurenwiel taak opnieuw te doen. Echter, de moeilijkheid van de taak en de hoogte van de beloning hangen af van uw keuzes.';
-    imgChoice=imread('ChoiceDirectDUTCH.png');
-    imageChoice=Screen('MakeTexture',wPtr,imgChoice);
-    
-    Instruction{3}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Bijvoorbeeld: Zou u liever 2 euro ontvangen voor de VERVANG (V) taak met 1 vierkant of zou u liever 2 euro ontvangen voor de NEGEER (N) taak met 1 vierkant?';
+    Instruction{1} = 'Welkom bij de keuze experiment!\n U kunt door de instructies gaan met de linker- en rechterpijltoetsen.\n Klik op de rechterpijltoets om verder te gaan.';
+    Instruction{2} = 'Tijdens dit onderdeel willen we zien hoeveel moeite het u kost om de Update of de Negeer taak opnieuw te doen. We bieden u twee opties met kleine beloningen (geldbedrag) voor het herhalen van een experiment en u kiest degene die u leuker vindt! We willen weten welk aanbod U beter vindt. ';    
+    imgChoice=imread('ChoiceSZDUTCH.png');
+    imageChoice=Screen('MakeTexture',wPtr,imgChoice);   
+    Instruction{3}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Voorbeeld: Zou u liever 1 euro ontvangen voor de UPDATE (U) taak met 1 vierkant of zou u liever 2 euro ontvangen voor de UPDATE (U) taak met 3 vierkant?';
     Instruction{4} = sprintf('Om de linker optie te selecteren, drukt u op 1 en om de rechter optie te selecteren drukt u op 2.');
-    imgChoiceMade=imread('ChoiceMadeDirectDUTCH.png');
+    imgChoiceMade=imread('ChoiceMadeSZDUTCH.png');
     imageChoiceMade=Screen('MakeTexture',wPtr,imgChoiceMade);
     Instruction{5}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Een vierkant wordt getoond om aan te geven dat u een keuze heeft gemaakt.';
-    Instruction{6} = 'U zult meerdere keren dezelfde soort keuzes maken.';
-    Instruction{7} = 'Een van deze keuzes zal na afloop willekeurig worden gekozen. Deze keuze bepaalt welke taak u dan opnieuw moet doen en hoeveel geld u daarvoor krijgt.';
-    Instruction{8}='Druk op een toets om de oefening van dit onderdeel te starten.\n Deze keuzes worden nog niet meegerekend.';
+    Instruction{6} = 'We zullen u veel vergelijkbare aanbiedingen laten zien en u moet elke keer kiezen welk aanbod u accepteert.';
+    Instruction{7} = 'Uiteindelijk kiest de computer willekeurig een van de aanbiedingen die u hebt geaccepteerd. U zult de taak geassocieerd met dat aanbod moeten herhalen en ontvangt ook de aangeboden beloning.';
+    Instruction{8}='Druk op een toets om de oefenversie van dit onderdeel te starten.\n Deze keuzes worden nog niet meegerekend.';
     
 elseif level == 2
-    Instruction{1}='Daarnaast heeft u soms ook de mogelijkheid om te kiezen geen enkele taak opnieuw te doen en toch een beloning te krijgen. U kunt bij deze keuze de overgebleven tijd in de onderzoeksruimte zelf indelen.';
+    Instruction{1}='Daarnaast heeft u soms ook de keuze om geen enkele taak opnieuw te doen en toch een beloning te krijgen. Bij deze keuze kunt u de overgebleven tijd in deze onderzoeksruimte zelf indelen.';
     imgChoiceNR=imread('ChoiceNoRedoDUTCH.png');
     imageChoiceNR=Screen('MakeTexture',wPtr,imgChoiceNR);
-    Instruction{2}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Bijvoorbeeld: Zou u liever 2 euro ontvangen voor de NEGEER (N) taak met 1 vierkant of 60 eurocent ontvangen en geen taak doen?';
+    Instruction{2}='\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n BIJVOORBEELD: Zou u liever 2 euro ontvangen voor de NEGEER (N) taak met 1 vierkant of 60 eurocent ontvangen en geen taak doen?';
     Instruction{3}='Druk op een toets om de oefenversie te starten.';
 elseif level==3
-    Instruction{1}= 'U zult dus veel keuzes maken: soms moet u kiezen tussen twee taken, soms tussen een taak en geen taak. Een van al uw keuzes zal worden geselecteerd en u zult deze taak 15 minuten lang opnieuw uitvoeren.';
-    Instruction{2}= 'Als u een taak opnieuw gaat doen, dan is het belangrijk dat u probeert om de taak zo goed mogelijk te doen. Maar u ontvangt de beloning ook als u fouten maakt.';
+    Instruction{1}= 'U zult dus veel keuzes maken. Soms moet u kiezen tussen twee taken, soms tussen een taak en geen taak. Van al uw keuzes zal er een worden geselecteerd en u zult deze taak 15 minuten lang opnieuw uitvoeren.';
+    Instruction{2}= 'Als u een taak opnieuw gaat doen maar niet altijd nauwkeurig antwoord dan zult u de beloning ontvangen zolang u goed uw best blijft doet.' ;
     imgChoiceMade=imread('ChoiceMadeExample1DUTCH.png');
     imageChoiceMade=Screen('MakeTexture',wPtr,imgChoiceMade);
-    Instruction{3}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Bijvoorbeeld: als deze keuze is geselecteerd doet u voornamlijk de NEGEER (N) taak met 1 vierkant en ontvangt u 2.00 euro.';
+    Instruction{3}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n BIJVOORBEELD: als deze keuze is geselecteerd doet u voornamlijk de NEGEER (N) taak met 3 vierkanten en ontvangt u 2.00 euro.';
     imgChoiceExample=imread('ChoiceMadeExample2DUTCH.png');
     imageChoiceExample=Screen('MakeTexture',wPtr,imgChoiceExample);
-    Instruction{4}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Bijvoorbeeld: als deze keuze is geselecteerd dan hoeft u geen taak te herhalen en ontvangt u 1.60 euro.';
-    Instruction{5}='Geef geen gehaaste antwoorden. Het is erg belangrijk dat u denkt aan het geld en aan uw ervaring met het doen van de specifieke taak (NEGEER/ VERVANG) en moeilijkheidniveaus ( 1/ 3 vierkanten).';
+    Instruction{4}= '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n BIJVOORBEELD: als deze keuze is geselecteerd dan hoeft u geen taak te herhalen en ontvangt u 1.60 euro.';
+    Instruction{5}='Geef geen gehaaste antwoorden. Het is erg belangrijk dat u denkt aan het geld en aan uw ervaring met het doen van de specifieke taak (NEGEER/ UPDATE) en de moeilijkheidniveaus ( 1/ 3 vierkanten).';
     Instruction{6}='Het is heel belangrijk dat u kiest wat u echt leuk vindt en niet wat u denkt dat we willen dat u kiest!';
     Instruction{7}='Als iets onduidelijk is, aarzel dan niet om het aan de onderzoekers te vragen!';
     
 elseif level==4
-    Instruction{1} = 'U hebt de oefenversie volbracht.\n\n U mag nu doorgaan met de keuze taak.';
+    Instruction{1} = 'U hebt de oefenversie volbracht.\n\n U mag nu doorgaan met de keuze experiment.';
     Instruction{2}='Veel succes!';
     
 elseif level==5
-    Instruction{1}='Dit was het einde van de keuze taak! \n\n Nu zal een van uw keuzes worden geselecteerd voor de herhaling van de kleurenwiel taak.';
+    Instruction{1}='Dit was het einde van de keuze experiment! \n\n Nu zal een van uw keuzes worden geselecteerd voor de herhaling van de kleurenwiel experiment.';
 end
 
 counter=1;

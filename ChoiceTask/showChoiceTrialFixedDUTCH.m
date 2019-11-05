@@ -22,7 +22,7 @@ locations_left = [LC + [-offset -offset]; LC + [offset -offset]; LC + [offset of
 locations_right = [RC + [-offset -offset]; RC + [offset -offset]; RC + [offset offset]; RC + [-offset offset]];
 
 % 4) text on screen while choice
-msgUPD = 'Vervang';
+msgUPD = 'Update';
 msgIGN = 'Negeer';
 
 
@@ -45,8 +45,8 @@ for trial = 1:length(data.trialNumber)
                             msgTypeL='Geen taak';
                             msgTypeR='Negeer 1';
                         case 2
-                            msgTypeL='Vervang 1';
-                            msgTypeR='Negeer 1';
+                            msgTypeL='Update 1';
+                            msgTypeR='Update 3';
                     end
                     
                     
@@ -56,8 +56,8 @@ for trial = 1:length(data.trialNumber)
                             msgTypeL='Geen taak';
                             msgTypeR='Negeer 2';
                         case 2
-                            msgTypeL='Vervang 2';
-                            msgTypeR='Negeer 2';
+                            msgTypeL='Update 2';
+                            msgTypeR='Update 3';
                     end
                 case 3                % setsize 4
                     switch data.version(trial)
@@ -65,8 +65,8 @@ for trial = 1:length(data.trialNumber)
                             msgTypeL='Geen taak';
                             msgTypeR='Negeer 3';
                         case 2
-                            msgTypeL='Vervang 3';
-                            msgTypeR='Negeer 3';
+                            msgTypeL='Negeer 3';
+                            msgTypeR='Negeer 1';
                     end
                     
                 case 4 % set size 4 or Negeer 4
@@ -75,28 +75,28 @@ for trial = 1:length(data.trialNumber)
                             msgTypeL='Geen taak';
                             msgTypeR='Negeer 4';
                         case 2
-                            msgTypeL='Vervang 4';
+                            msgTypeL='Update 4';
                             msgTypeR='Negeer 4';
                     end
                 case 5 %Update 1
                     
                     msgTypeL='Geen taak';
-                    msgTypeR='Vervang 1';
+                    msgTypeR='Update 1';
                     
                 case 6 % Update 2
                     
                     msgTypeL='Geen taak';
-                    msgTypeR='Vervang 2';
+                    msgTypeR='Update 2';
                     
                     
                 case 7 % Update 3
                     
                     msgTypeL='Geen taak';
-                    msgTypeR='Vervang 3';
+                    msgTypeR='Update 3';
                     
-                case 8 %Vervang 4
+                case 8 %Update 4
                     msgTypeL='Geen taak';
-                    msgTypeR='Vervang 4';
+                    msgTypeR='Update 4';
                     
             end %switch typeTask
             
@@ -113,7 +113,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeR='Geen taak';
                             msgTypeL='Negeer 1';
                         case 2
-                            msgTypeR='Vervang 1';
+                            msgTypeR='Update 1';
                             msgTypeL='Negeer 1';
                     end
                     
@@ -124,7 +124,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeR='Geen taak';
                             msgTypeL='Negeer 2';
                         case 2
-                            msgTypeR='Vervang 2';
+                            msgTypeR='Update 2';
                             msgTypeL='Negeer 2';
                     end
                 case 3                % setsize 4
@@ -133,7 +133,7 @@ for trial = 1:length(data.trialNumber)
                             msgTypeR='Geen taak';
                             msgTypeL='Negeer 3';
                         case 2
-                            msgTypeR='Vervang 3';
+                            msgTypeR='Update 3';
                             msgTypeL='Negeer 3';
                     end
                     
@@ -143,28 +143,28 @@ for trial = 1:length(data.trialNumber)
                             msgTypeR='Geen taak';
                             msgTypeL='Negeer 4';
                         case 2
-                            msgTypeR='Vervang 4';
+                            msgTypeR='Update 4';
                             msgTypeL='Negeer 4';
                     end
                 case 5 %Update 1
                     
                     msgTypeR='Geen taak';
-                    msgTypeL='Vervang 1';
+                    msgTypeL='Update 1';
                     
                 case 6 % Update 2
                     
                     msgTypeR='Geen taak';
-                    msgTypeL='Vervang 2';
+                    msgTypeL='Update 2';
                     
                     
                 case 7 % Update 3
                     
                     msgTypeR='Geen taak';
-                    msgTypeL='Vervang 3';
+                    msgTypeL='Update 3';
                     
                 case 8 %Update 4
                     msgTypeR='Geen taak';
-                    msgTypeL='Vervang 4';
+                    msgTypeL='Update 4';
                     
             end %switch typeTask
             

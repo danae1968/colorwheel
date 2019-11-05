@@ -35,8 +35,8 @@ Screen('TextSize',wPtr,16);
 Screen('TextStyle',wPtr,1);
 Screen('TextFont',wPtr,'Courier New');
 
-EncSymbol='H';
-UpdSymbol='V';
+EncSymbol='O';
+UpdSymbol='U';
 IgnSymbol='N';
 M_color=[0 0 0];
 U_color=[0 0 0];
@@ -52,22 +52,11 @@ ovalRect=CenterRectOnPoint(rectTwo,pms.xCenter,pms.yCenter);
 %% loop around trials and blocks for stimulus presentation
 for p=1:pms.numBlocks
     Screen('FillRect',wPtr,pms.background)
-<<<<<<< HEAD
     Screen('Flip',wPtr)
     
     if pms.trackGaze
-        % KbStrokeWait
-        %     [pktdata, treceived] = IOPort('Read', myport, 1, 1);
-        % IOPort('ConfigureSerialPort')
-=======
-Screen('Flip',wPtr)
-
-    if pms.trackGaze
-        myport = IOPort('OpenSerialPort');
-KbStrokeWait
-    [pktdata, treceived] = IOPort('Read', myport, 1, 1);
-IOPort('ConfigureSerialPort')
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
+        
+        
         driftShift = pms.driftShift;
         pms.el = EyelinkSetup(1,wPtr);
         Eyelink('StartRecording')
@@ -85,10 +74,11 @@ IOPort('ConfigureSerialPort')
             if phase == 1 %new trial
                 Screen('FillOval',wPtr,pms.ovalColor,ovalRect);
                 Screen('Flip',wPtr)
+%                 imageArray=Screen('GetImage',wPtr);
+%                 imwrite(imageArray,sprintf('Signal%d%d.png',g,p),'png');
                 WaitSecs(pms.signal)
                 if pms.trackGaze
-                    %                                                       imageArray=Screen('GetImage',wPtr);
-                    %                                     imwrite(imageArray,sprintf('Signal%d%d.png',g,p),'png');
+                    
                     % During my task, participants must look at a central offer for 1
                     % sec for the trial to proceed. Since the calibration for gaze location
                     % might drift over time, I've built in a drift calibration routine using
@@ -113,7 +103,7 @@ IOPort('ConfigureSerialPort')
                         sample = getEyelinkData();
                         while doDrift % drift correction
                             [~, ~, keyCode] = KbCheck();
-                            if strcmp(pms.allowedResps.driftOK,KbName(keyCode));
+                            if strcmp(pms.allowedResps.driftOK,KbName(keyCode))
                                 sample = getEyelinkData();
                                 driftShift = [(rect(3)/2)-sample(1),(rect(4)/2)-sample(2)]; %[x,y]
                                 %report = '***** Drift adjusted! *****';
@@ -133,7 +123,7 @@ IOPort('ConfigureSerialPort')
                         
                         % if not yet met the timelimit and gaze outside target circle
                         [~, ~, keyCode] = KbCheck();
-                        if strcmp(pms.allowedResps.drift,KbName(keyCode));
+                        if strcmp(pms.allowedResps.drift,KbName(keyCode))
                             %report = '***** The participant indicates drift! *****'
                             doDrift = 1;
                             DrawFormattedText(wPtr, 'Kijk naar het midden van het scherm.', 'center', 'center', pms.driftCueCol);
@@ -202,9 +192,9 @@ IOPort('ConfigureSerialPort')
                             end
                         else
                             
-                            %                                                                          imageArray=Screen('GetImage',wPtr);
-                            %                                                                         imwrite(imageArray,sprintf('Encoding%d%dDUTCH.png',g,p),'png');
-                            
+                            %                                                                                                      imageArray=Screen('GetImage',wPtr);
+                            %                                                                                                     imwrite(imageArray,sprintf('Encoding%d%dDUTCH.png',g,p),'png');
+                            %
                             
                             
                             switch trial(g,p).type
@@ -226,29 +216,29 @@ IOPort('ConfigureSerialPort')
                 % %                         imwrite(imageArray,sprintf('Delay%d%d.png',g,p),'png');
                 T.delay1_on(g,p) = GetSecs;
                 
-                   if practice==1 || practice==2
+                if practice==1 || practice==2
                     WaitSecs(pms.delay1DurationPr)
                 else
                     
-                                if pms.trackGaze
-                                    switch trial(g,p).type
-                                case 0
-                            
-                            [itrack_delay1] = sampleGaze(driftShift,T.delay1_on(g,p),pms.delay1DurationIgn);
-                            
-                                        case 2
-                             [itrack_delay1] = sampleGaze(driftShift,T.delay1_on(g,p),pms.delay1DurationUpd);
-                                    end
-                        else
-                           
-                            switch trial(g,p).type
-                                case 0
-                                    WaitSecs(pms.delay1DurationIgn);
-                                case 2
-                                    WaitSecs(pms.delay1DurationUpd);
-                            end
-                   
-                                end
+                    if pms.trackGaze
+                        switch trial(g,p).type
+                            case 0
+                                
+                                [itrack_delay1] = sampleGaze(driftShift,T.delay1_on(g,p),pms.delay1DurationIgn);
+                                
+                            case 2
+                                [itrack_delay1] = sampleGaze(driftShift,T.delay1_on(g,p),pms.delay1DurationUpd);
+                        end
+                    else
+                        
+                        switch trial(g,p).type
+                            case 0
+                                WaitSecs(pms.delay1DurationIgn);
+                            case 2
+                                WaitSecs(pms.delay1DurationUpd);
+                        end
+                        
+                    end
                 end
                 T.delay1_off(g,p) = GetSecs;
                 
@@ -298,8 +288,8 @@ IOPort('ConfigureSerialPort')
                             
                         else
                             %
-                            %                                                                             imageArray=Screen('GetImage',wPtr);
-                            %                                                                             imwrite(imageArray,sprintf('InterI%d%dDUTCH.png',g,p),'png');
+                            %                                                                                                         imageArray=Screen('GetImage',wPtr);
+                            %                                                                                                         imwrite(imageArray,sprintf('InterI%d%dDUTCH.png',g,p),'png');
                             WaitSecs(pms.interfDurationIgn);
                         end
                         T.I_ignore_off(g,p) = GetSecs;
@@ -345,8 +335,8 @@ IOPort('ConfigureSerialPort')
                             
                         else
                             
-                            %                                                                             imageArray=Screen('GetImage',wPtr);
-                            %                                                                             imwrite(imageArray,sprintf('InterU%d%dDUTCH.png',g,p),'png');
+                            %                                                                                                         imageArray=Screen('GetImage',wPtr);
+                            %                                                                                                         imwrite(imageArray,sprintf('InterU%d%dDUTCH.png',g,p),'png');
                             WaitSecs(pms.interfDurationUpd);
                         end
                         T.I_update_off(g,p) = GetSecs;
@@ -426,21 +416,13 @@ IOPort('ConfigureSerialPort')
                 end %if practice==1
                 
                 if strcmp(pms.language,'DUTCH')
-<<<<<<< HEAD
                     
                     if practice==1 || practice==2
-                        [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
+                        [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,g,p);
                     elseif practice==0
-                        [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
+                        [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,g,p,trial);
                     end
-=======
-
-                if practice==1 || practice==2
-                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
-                elseif practice==0
-                    [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtFirstMove]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p,trial);
-                end
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
+                    
                 else
                     if practice==1 || practice==2
                         [respX,respY,rt,colortheta,respXAll,respYAll,rtAll]=probecolorwheelNew(pms,allRects,probeRectX,probeRectY,practice,trial(g,p).probeColorCorrect,trial(g,p).lureColor,rect,wPtr,g,p);
@@ -449,6 +431,8 @@ IOPort('ConfigureSerialPort')
                     end
                 end
                 [respDif,tau,thetaCorrect,radius,lureDif]=respDev(colortheta,trial(g,p).probeColorCorrect,trial(g,p).lureColor,respX,respY,rect);
+                
+      
                 save(fullfile(pms.colordir,dataFilenamePrelim));
                 
                 %Break after every block
@@ -461,13 +445,9 @@ IOPort('ConfigureSerialPort')
                         if pms.trackGaze
                             Eyelink('Stoprecording')
                             pms.el = EyelinkSetup(0,pms);
-<<<<<<< HEAD
                             IOPort('Close', pms.portHandle);
                             
-                            %                                 [pktdata, treceived] = IOPort('Read', myport, 0, 1);
-=======
-                                [pktdata, treceived] = IOPort('Read', myport, 0, 1);
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
+                            
                         end
                     end
                 end
@@ -476,11 +456,7 @@ IOPort('ConfigureSerialPort')
                 data(g,p).rt=rt;
                 data(g,p).respCoordAll=[respXAll respYAll];
                 data(g,p).rtAll=rtAll;
-<<<<<<< HEAD
                 data(g,p).rtDecision=rtMovement;
-=======
-                data(g,p).rtMovement=rtMovement;
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
                 data(g,p).rtFirstMove=rtFirstMove;
                 data(g,p).probeLocation=[probeRectX probeRectY];
                 data(g,p).probeColorCorrect=trial(g,p).probeColorCorrect;
@@ -491,21 +467,13 @@ IOPort('ConfigureSerialPort')
                 data(g,p).thetaCorrect=thetaCorrect;
                 data(g,p).tau=tau;
                 data(g,p).rect=rect;
-<<<<<<< HEAD
-                %                 data(g,p).pktdata=pktdata;
-                %                 data(g,p).treceived=treceived;
-=======
-                data(g,p).pktdata=pktdata;
-                data(g,p).treceived=treceived;
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
+                
                 %                 data(g,p).colPie=trial(g,p).colPie;
                 %add additional information to data
                 data(g,p).setsize = trial(g,p).setSize;
-                %                 data(g,p).trialNum=trial(g,p).number;
                 data(g,p).type=trial(g,p).type;
                 data(g,p).location =trial(g,p).locations;
                 data(g,p).colors = trial(g,p).colors;
-                %data(g,p).interTime=trial(g,p).interTime;
                 if pms.trackGaze
                     %     gazedata(g,p).encoding = itrack_encoding; % save all eyetracker data here
                     %                     gazedata(g,p).interference = itrack_interference; % save all eyetracker data here
@@ -513,8 +481,8 @@ IOPort('ConfigureSerialPort')
                     pms.driftShift = driftShift; % update for next trial
                     gazedata(g,p).encoding=itrack_encoding;
                     gazedata(g,p).interference=itrack_interference;
-                                        gazedata(g,p).delay1=itrack_delay1;
-
+                    gazedata(g,p).delay1=itrack_delay1;
+                    
                     varargout{3}=gazedata;
                 end
                 if practice==0

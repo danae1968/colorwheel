@@ -32,10 +32,11 @@ try
     switch nargin
         case 0 %if no input asks for subNo and practice and provides file names
             [subNo,dataFilename,dataFilenamePrelim,practice]=getInfoChoice; 
-        case 3 % if subNo, practice status, directory provided in main script
+        case 4 % if subNo, practice status, directory provided in main script
             subNo=varargin{1};
             practice=varargin{2};
             choicedir=varargin{3};
+            pms=varargin{4};
              [subNo,dataFilename,dataFilenamePrelim,practice]=getInfoChoice(subNo,practice); 
     end
     %% set experiment parameters
@@ -60,12 +61,12 @@ try
     pms.numChoices=pms.numChoices1+pms.numChoices2; %total number of choices
 
     %%practice
-    pms.repsPrac=2; %repetitions for practice if we want to vary the offers
+    pms.repsPrac=1; %repetitions for practice if we want to vary the offers
    % pms.stepPrac=0.8; % if we want to have varying offers 
 %     pms.easyOffer1Prac=pms.min:pms.stepPrac:pms.max1;
 %     pms.easyOffer2Prac=pms.min:pms.stepPrac:pms.max2;
-    pms.easyOffer1Prac=2; %easy offer for practice is always to avoid biasing them
-    pms.easyOffer2Prac=2;
+    pms.easyOffer1Prac=1; %easy offer for practice is always to avoid biasing them
+    pms.easyOffer2Prac=1;
     pms.numPairs1Prac=length(pms.easyOffer1Prac); %number of pairs for practice per version
     pms.numPairs2Prac=length(pms.easyOffer2Prac);    
     pms.numChoices1Prac = length(pms.typeTask1)*length(pms.easyOffer1Prac)*pms.repsPrac;
@@ -204,11 +205,14 @@ try
     varargout{3}=bonus;
       
         % save data
+          if exist(fullfile(pms.choiceDir,dataFilename), 'file')
+            dataFilename=strcat(dataFilename,randi(1000));
+        end
      save(fullfile(pms.choicedir,dataFilename),'data','dataHeader','pms','bonus');
 %     cd('M:\.matlab\GitHub\QuantifyingCC')
 %     BeautifulColorwheel(pms.subNo, pms.choiceSZ,pms.choiceCondition)
    end
-    if practice~=1
+    if practice~=1 || pms.runChoice==0
     clear Screen
     Screen('CloseAll');
     ShowCursor; % display mouse cursor again

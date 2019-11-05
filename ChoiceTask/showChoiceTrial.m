@@ -22,17 +22,16 @@ locations_left = [LC + [-offset -offset]; LC + [offset -offset]; LC + [offset of
 locations_right = [RC + [-offset -offset]; RC + [offset -offset]; RC + [offset offset]; RC + [-offset offset]];
 
 % 4) text on screen while choice
-msgUPD = 'Vervang';
+msgUPD = 'Update';
 msgIGN = 'Negeer';
 
 %% Stimulus presentation starts here
 for trial = 1:length(data.trialNumber)
     
     save(fullfile(pms.choicedir,dataFilenamePrelim.dataFilenamePrelim))
-    
+  
     msgHard = double(sprintf('voor €%.2f',data.hardOffer(trial)));
     msgEasy = double(sprintf('voor €%.2f',data.easyOffer(trial)));
-    
     
     
     switch data.typeTask(trial)
@@ -45,36 +44,36 @@ for trial = 1:length(data.trialNumber)
             
         case 2                % setsize 2 or Ignore 2
             
-            msgTypeL='Vervang 1';
-            msgTypeR='Vervang 3';
+            msgTypeL='Update 1';
+            msgTypeR='Update 3';
             
         case 3                % setsize 4
-            msgTypeL='Vervang 1';
+            msgTypeL='Update 1';
             msgTypeR='Negeer 1';
             
         case 4 % set size 4 or Ignore 4
-            msgTypeL='Vervang 3';
+            msgTypeL='Update 3';
             msgTypeR='Negeer 3';
             
-        case 5 %Vervang 1
+        case 5 %Update 1
             
             msgTypeL='Geen taak';
             msgTypeR='Negeer 1';
             
-        case 6 % Vervang 2
+        case 6 % Update 2
             
             msgTypeL='Geen taak';
             msgTypeR='Negeer 3';
             
             
-        case 7 % Vervang 3
+        case 7 % Update 3
             
             msgTypeL='Geen taak';
-            msgTypeR='Vervang 1';
+            msgTypeR='Update 1';
             
-        case 8 %Vervang 4
+        case 8 %Update 4
             msgTypeL='Geen taak';
-            msgTypeR='Vervang 3';
+            msgTypeR='Update 3';
             
     end %switch typeTask
     
@@ -160,6 +159,7 @@ for trial = 1:length(data.trialNumber)
         
     
     %check to see if participant is too slow
+    if pms.practice==0
     if isempty(responded)
         resp = NaN;
         choiceRT = NaN;
@@ -194,6 +194,7 @@ for trial = 1:length(data.trialNumber)
         end
     end
     
+    end
     
     data.choice(trial) = resp;
     data.choiceRT(trial) = choiceRT;
@@ -209,15 +210,18 @@ for trial = 1:length(data.trialNumber)
     Screen('FrameRect',wPtr,[0 0 0],rect_Center);
     
          Screen('Flip',wPtr);
+%          
 %          imageArray=Screen('GetImage',wPtr);
-%         r=randi(100,1);
-%         imwrite(imageArray,sprintf('choiceMade%d',r),'bmp');
+%         imwrite(imageArray,sprintf('choiceMade%d%d',trial),'bmp');
+        
+        
          WaitSecs(pms.iti);
         
 %Break after every block
 
-            if  pms.practice==1
+            if  pms.practice==1 && data.trialNumber(trial) == data.trialNumber(end)
                 getInstructionsChoiceDUTCH(2,pms,wPtr)
+                
             end
             
      

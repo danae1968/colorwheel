@@ -39,8 +39,14 @@ try
             subNo=varargin{1};
             practice=varargin{2};
             colordir=varargin{3};
-    [subNo,dataFilename,dataFilenamePrelim,practice,manipulation]=getInfo(subNo,practice);            
-
+    [subNo,dataFilename,dataFilenamePrelim,practice,manipulation]=getInfo(subNo,practice);   
+    
+        case 4
+            subNo=varargin{1};
+            practice=varargin{2};
+            colordir=varargin{3};
+            pms=varargin{4};
+    [subNo,dataFilename,dataFilenamePrelim,practice,manipulation]=getInfo(subNo,practice);    
         case 6
             subNo=varargin{1};
             practice=varargin{2};
@@ -52,11 +58,13 @@ try
             dataFilename=sprintf('ColorFun_s%d_Redo.mat',subNo);
             dataFilenamePrelim=sprintf('CF_s%d_Redo_pre.mat',subNo);
     end
+    
 
     %% set experiment parameters
     pms.language='DUTCH';
     pms.myPort='COM1';
     pms.baudrate=115200;
+    %HERE SET TRACK GAZE TO 0 FOR NO GAZE
     pms.trackGaze=0;
     pms.numTrials = 32; % adaptable; important to be dividable by 2 (conditions) and multiple of 4 (set size)
     pms.numBlocks = 2;
@@ -66,8 +74,8 @@ try
     pms.Upd3Tr = char(hex2dec('7533'));
     
     pms.numCondi = 2;  % 0 IGNORE, 2 UPDATE
-    pms.numTrialsPr=8; %trials for practice
-    pms.numBlocksPr=2; %blocks for practice
+    pms.numTrialsPr=12; %trials for practice
+    pms.numBlocksPr=1; %blocks for practice
     pms.redoTrials=24; %trials for Redo
     pms.redoBlocks=1; %blocks for Redo
     pms.setsize=[1 3]; %maximum number of squares used
@@ -82,7 +90,7 @@ try
     pms.background          = [128,128,128];
     pms.wrapAt              = 65;
     pms.spacing             = 2;
-    pms.textSize            = 22;
+    pms.textSize            = 25;
     pms.textFont            = 'Times New Roman';
     pms.textStyle           = 1; 
     pms.ovalColor           = [0 0 0];
@@ -96,7 +104,7 @@ try
     pms.fixDuration = 0.75; % required fixation duration in seconds before trials initiate
     pms.diagTol = 100; % diagonal pixels of tolerance for fixation
     % timings
-    pms.maxRT = 5; % max RT
+    pms.maxRT = 4.5; % max RT
     pms.encDuration = 2;    %2 seconds of encoding
     pms.encDurationIgn=2;
     pms.encDurationUpd=2;
@@ -126,6 +134,12 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
         pms.colordir=pwd;
     end
     
+    %make sure file does not exist
+    if exist(fullfile(pms.colordir,dataFilename),'file')
+     randAttach = round(rand*10000);
+    dataFilename = strcat(dataFilename, sprintf('_%d.mat',randAttach));
+    dataFilenamePrelim = strcat(dataFilenamePrelim, sprintf('_%d.mat',randAttach));
+end
     % initialize the random number generator
     randSeed = sum(100*clock);
     
@@ -151,7 +165,9 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
     % open an onscreen window
     [wPtr,rect]=Screen('Openwindow',max(Screen('Screens')),pms.background);
     pms.xCenter=rect(3)/2;
-    pms.yCenter=rect(4)/2;     
+    pms.yCenter=rect(4)/2; 
+    pms.rect=rect;
+    pms.wPtr=wPtr;
     Screen('BlendFunction',wPtr,GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     if pms.trackGaze
     EyelinkInitDefaults(wPtr);
@@ -215,21 +231,21 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
     if strcmp(pms.language,'DUTCH')
   
           if     practice==1
-           getInstructionsDUTCH(1,pms,wPtr);
+           getInstructionsDUTCH(1,pms);
     elseif practice==0
-           getInstructionsDUTCH(2,pms,wPtr);
+           getInstructionsDUTCH(2,pms);
     elseif practice==2
-           getInstructionsDUTCH(5,pms,wPtr);
+           getInstructionsDUTCH(5,pms);
 
           end
     else
 
     if     practice==1
-           getInstructions(1,pms,wPtr);
+           getInstructions(1,pms);
     elseif practice==0
-           getInstructions(2,pms,wPtr);
+           getInstructions(2,pms);
     elseif practice==2
-           getInstructions(5,pms,wPtr);
+           getInstructions(5,pms);
 
     end
     end
@@ -260,27 +276,29 @@ pms.trialDurationUpd=pms.encDurationUpd+pms.delay1DurationUpd+pms.interfDuration
     
         
     %% Save the data
+       
+      
     save(fullfile(pms.colordir,dataFilename));
     %% Close-out tasks
     if strcmp(pms.language,'DUTCH')
 if practice==0
-       getInstructionsDUTCH(4,pms,wPtr)   
+       getInstructionsDUTCH(4,pms)   
     elseif practice==1
-       getInstructionsDUTCH(3,pms,wPtr)   
+       getInstructionsDUTCH(3,pms)   
     elseif practice==2
-        getInstructionsDUTCH(6,pms,wPtr)
+        getInstructionsDUTCH(6,pms)
 end
     else 
     if practice==0
-       getInstructions(4,pms,wPtr)   
+       getInstructions(4,pms)   
     elseif practice==1
-       getInstructions(3,pms,wPtr)   
+       getInstructions(3,pms)   
     elseif practice==2
-        getInstructions(6,pms,wPtr)
+        getInstructions(6,pms)
     end
     end
     
-   if practice~=1
+   if practice~=1 || pms.runColorwheel==0
     clear Screen
     Screen('CloseAll');
     ShowCursor; % display mouse cursor again
@@ -293,6 +311,7 @@ catch ME
    keyboard
     
     % save data
+
     save(fullfile(pms.colordir,dataFilename));
     
     % close-out tasks

@@ -35,7 +35,7 @@ elseif practice==1
     dataFilenamePrelim=sprintf('CF_s%d_pre_practice.mat',subNo);
 end
 
-if exist (dataFilename,'file')
+if exist (fullfile(dataFilename),'file')
     randAttach = round(rand*10000);
     dataFilename = strcat(dataFilename, sprintf('_%d.mat',randAttach));  
 end

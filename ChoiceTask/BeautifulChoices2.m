@@ -32,10 +32,11 @@ try
     switch nargin
         case 0 %if no input asks for subNo and practice and provides file names
             [subNo,dataFilename,dataFilenamePrelim,practice]=getInfoChoice; 
-        case 3 % if subNo, practice status, directory provided in main script
+        case 4 % if subNo, practice status, directory provided in main script
             subNo=varargin{1};
             practice=varargin{2};
             choicedir=varargin{3};
+            pms=varargin{4};
              [subNo,dataFilename,dataFilenamePrelim,practice]=getInfoChoice(subNo,practice); 
     end
     %% set experiment parameters
@@ -48,15 +49,19 @@ try
     pms.reps=2;%repetitions
     pms.hardOffer=2; %offer for hard task that remains fixed
     pms.nCalTrials=5;
+    pms.nCalTrialsPr=1;
     pms.amts=2;
     pms.adjAmt=pms.hardOffer/2;
     pms.typeTask = 1:8; %1:2, Ignore all set sizes, 3:4 Update all set sizes
+    pms.typeTaskPr=[1:2];
     pms.Conditions = {0,2}; %UPDATE IGNORE
     pms.Choices = length(pms.typeTask) * pms.nCalTrials * length(pms.amts); %  2 conditions * 3 Subj values * calibration * amount
+    pms.Choices_prac= length(pms.typeTaskPr) * pms.nCalTrialsPr * length(pms.amts);
     pms.easyOffer=2;
+    pms.easyOfferPr=1;
     pms.hardOffer=2;
+    pms.hardOfferPr=2;
     pms.step=(1/2).^(0:pms.nCalTrials-1); %list comprehension of sequence 1/2N
-
     %%practice
 %     pms.repsPrac=2; %repetitions for practice if we want to vary the offers
 %    % pms.stepPrac=0.8; % if we want to have varying offers 
@@ -96,6 +101,13 @@ try
     else
         pms.choicedir=pwd;
     end
+    
+        %make sure file does not exist
+    if exist(fullfile(pms.choicedir,dataFilename),'file')
+     randAttach = round(rand*10000);
+    dataFilename = strcat(dataFilename, sprintf('_%d.mat',randAttach));
+    dataFilenamePrelim = strcat(dataFilenamePrelim, sprintf('_%d.mat',randAttach));
+end
     %% display and screen
     % display parameters
     
@@ -178,8 +190,7 @@ try
           else
                   [data] = showChoiceTrialFixed(pms, data, wPtr, rect, dataHeader); %adapt MF
           end
-    %% Save the data
-     save(fullfile(pms.choicedir,dataFilename));
+ 
     %% Close-out tasks
 
    if practice==1
@@ -201,11 +212,12 @@ try
     varargout{3}=bonus;
       
         % save data
+             
      save(fullfile(pms.choicedir,dataFilename),'data','dataHeader','pms','bonus');
-%     cd('M:\.matlab\GitHub\QuantifyingCC')
-%     BeautifulColorwheel(pms.subNo, pms.choiceSZ,pms.choiceCondition)
+     
+
    end
-    if practice~=1
+    if practice~=1 || pms.runChoice==0
     clear Screen
     Screen('CloseAll');
     ShowCursor; % display mouse cursor again

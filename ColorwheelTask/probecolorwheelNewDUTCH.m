@@ -1,4 +1,4 @@
-function [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtDecision]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,probeColorCorrect,lureColor,rect,wPtr,g,p,varargin)
+function [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtDecision]=probecolorwheelNewDUTCH(pms,allRects,probeRectX,probeRectY,practice,probeColorCorrect,lureColor,g,p,varargin)
 % function that gives the colorwheel for the task and the probe of the colorwheel memory task
 % Takes as inputs the amount of colors displayed on the wheel, the X Y coordinates
 % of the probe rect and the maxRT possible. Colorwheel is constructed by
@@ -27,7 +27,7 @@ function [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtDecisio
 % 
 % 
 % functions called        [respDif,tau,thetaCorrect,radius]=respDev(colortheta,probeColorCorrect,respX,respY)
-%                         drawFixationCross(wPtr,rect)
+%                         drawFixationCross(pms.wPtr,rect)
 % respDev provides the angle of the response made by the participant,the correct angle, the deviance
 % of the response from the correct color and the radius of the circle created by the response of 
 % the participant. We need the radius to estimate if they clicked on the colorwheel.
@@ -40,11 +40,11 @@ function [respX,respY,rt,colortheta,respXAll,respYAll,rtAll,rtMovement,rtDecisio
 % wheelRadiusY=113;
 
 %center coordinates
-centerX=rect(3)/2;
-centerY=rect(4)/2;
+centerX=pms.rect(3)/2;
+centerY=pms.rect(4)/2;
 %show mouse and place it in the center of the screen
 ShowCursor('Arrow');
-SetMouse(centerX,centerY,wPtr);
+SetMouse(centerX,centerY,pms.wPtr);
 
 %feedback messages
 messageLate='Reageer sneller!';
@@ -59,8 +59,8 @@ probeThickness=3;
 probeColor=[0 0 0];
 %rects that form the colorwheel are proportional of screen size
 probeRect=[100 100 200 200];
-insideRect=[rect(1) rect(2) 0.67*rect(4) 0.67*rect(4)]; %the white oval coordinates
-outsideRect=[rect(1) rect(2) 0.9*rect(4) 0.9*rect(4)]; %the wheel coordinates
+insideRect=[pms.rect(1) pms.rect(2) 0.67*pms.rect(4) 0.67*pms.rect(4)]; %the white oval coordinates
+outsideRect=[pms.rect(1) pms.rect(2) 0.9*pms.rect(4) 0.9*pms.rect(4)]; %the wheel coordinates
 insideRectColor=pms.background;
 %center all rects 
 outsideRect=CenterRectOnPoint(outsideRect,centerX, centerY);
@@ -76,10 +76,10 @@ colorangle=360/length(colors);
 %We want to shift the orientation of the colorwheel in every trial so we use an offset. To keep
 %it same for every participant we save the offset and load it: starts=randi(360,pms.numTrials,pms.numBlocks)
 switch nargin
-    case 11
+    case 9
         load starts
         wheelStart=starts(g,p);
-    case 12
+    case 10
         trial=varargin{1};
         wheelStart=trial(g,p).wheelStart;
 end
@@ -103,23 +103,23 @@ end
 
 % Colorwheel 
 for ind=1:length(colors)
-  Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
+  Screen('FillArc',pms.wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
 end
 
  %ring created with inside circle
-  Screen('FillOval',wPtr,insideRectColor,insideRect);
+  Screen('FillOval',pms.wPtr,insideRectColor,insideRect);
 %all rectangles
-Screen('FrameRect',wPtr,probeColor,allRects)
+Screen('FrameRect',pms.wPtr,probeColor,allRects)
 %probed rectangle 
-Screen('FrameRect', wPtr, probeColor, probeRect,probeThickness)
-drawFixationCross(wPtr,rect)
+Screen('FrameRect', pms.wPtr, probeColor, probeRect,probeThickness)
+drawFixationCross(pms.wPtr,pms.rect)
 
 
-probeOnset = Screen('Flip',wPtr);
+probeOnset = Screen('Flip',pms.wPtr);
 %%%% response collected by coordinates of mouse click
 %show and set the mouse in the center
 
-%                           imageArray=Screen('GetImage',wPtr);
+%                           imageArray=Screen('GetImage',pms.wPtr);
 %                           imwrite(imageArray,sprintf('Probe%d.png',g,p),'png');
 
 
@@ -131,7 +131,7 @@ movement=0;
 response=0;
 while GetSecs-probeOnset<pms.maxRT %while they did not make a response during the probe response duration
     [~, secs, ~] = KbCheck;
-    [x,y,buttons]=GetMouse(wPtr);
+    [x,y,buttons]=GetMouse(pms.wPtr);
                 radiusWheel      = sqrt((x-centerX)^2+(y-centerY)^2);                
 
     if radiusWheel>25
@@ -150,22 +150,22 @@ while GetSecs-probeOnset<pms.maxRT %while they did not make a response during th
         respY=respYAll(1);
         rt=rtAll(1);
         rtMovement=rt-startResponse;
-        [respDif,tau,thetaCorrect,radius]=respDev(colortheta,probeColorCorrect,lureColor,respX,respY,rect); %90 for red responses around 0
+        [respDif,tau,thetaCorrect,radius]=respDev(colortheta,probeColorCorrect,lureColor,respX,respY,pms.rect); %90 for red responses around 0
         
         for ind=1:length(colors)
-            Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
+            Screen('FillArc',pms.wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
         end
         
         %Response indication: if they didn't click on the fixation cross (radius~=0) or within the inner circle, a line appears indicating
         %their choice
         if ~isnan('tau')
             if radius>abs(insideRect(1)-insideRect(3))/2
-                Screen('FillArc',wPtr,lineColor,outsideRect,tau-lineThickness/2,lineThickness/2); %response indication arc
-                Screen('FillOval',wPtr,insideRectColor,insideRect)
-                Screen('FrameRect',wPtr,probeColor,allRects)
-                Screen('FrameRect', wPtr, probeColor, probeRect,probeThickness)
-                drawFixationCross(wPtr,rect)
-                Screen('Flip',wPtr)
+                Screen('FillArc',pms.wPtr,lineColor,outsideRect,tau-lineThickness/2,lineThickness/2); %response indication arc
+                Screen('FillOval',pms.wPtr,insideRectColor,insideRect)
+                Screen('FrameRect',pms.wPtr,probeColor,allRects)
+                Screen('FrameRect', pms.wPtr, probeColor, probeRect,probeThickness)
+                drawFixationCross(pms.wPtr,pms.rect)
+                Screen('Flip',pms.wPtr)
                 %                   WaitSecs(pms.feedbackDuration)
             end
         end
@@ -185,37 +185,37 @@ if exist('respX','var')
     %drawn as a small arc of 0.4 degrees
     if practice==1 && radius>abs(insideRect(1)-insideRect(3))/2
         for ind=1:length(colors)
-            Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
+            Screen('FillArc',pms.wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
         end
         %their response
-        Screen('FillArc',wPtr,lineColor,outsideRect,tau-lineThickness/2,lineThickness/2);
-        Screen('FillArc',wPtr,lineColor,outsideRect,thetaCorrect-lineThickness/2,lineThickness/2);
-        Screen('FillOval',wPtr,insideRectColor,insideRect);
-        Screen('FrameRect',wPtr,probeColor,allRects)
-        Screen('FrameRect', wPtr, probeColor, probeRect,probeThickness)
+        Screen('FillArc',pms.wPtr,lineColor,outsideRect,tau-lineThickness/2,lineThickness/2);
+        Screen('FillArc',pms.wPtr,lineColor,outsideRect,thetaCorrect-lineThickness/2,lineThickness/2);
+        Screen('FillOval',pms.wPtr,insideRectColor,insideRect);
+        Screen('FrameRect',pms.wPtr,probeColor,allRects)
+        Screen('FrameRect', pms.wPtr, probeColor, probeRect,probeThickness)
         
         %feedback if they are +-10 degrees from target color
         if abs(respDif) <=10
-            Screen('TextSize',wPtr,20);
+            Screen('TextSize',pms.wPtr,20);
             message=sprintf('Goed bezig! \n U week slechts %d graden af van het correcte antwoord.',abs(round(respDif)));
-            DrawFormattedText(wPtr, message, 'center', 'center', messageColor);
+            DrawFormattedText(pms.wPtr, message, 'center', 'center', messageColor);
         else
             %otherwise no feedback
-            drawFixationCross(wPtr,rect)
+            drawFixationCross(pms.wPtr,pms.rect)
         end
-        Screen('Flip',wPtr)
+        Screen('Flip',pms.wPtr)
         WaitSecs(pms.feedbackDurationPr);
     end %if practice=1
     %if they clicked in the inner circle or on the fixation cross they receive feedback to click on the
     %colorwheel
 %     if isnan(tau)|| radius<abs(insideRect(1)-insideRect(3))/2
 %         for ind=1:length(colors)
-%             Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
+%             Screen('FillArc',pms.wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
 %         end
-%         Screen('FillOval',wPtr,insideRectColor,insideRect);
-%         Screen('TextSize',wPtr,18);
-%         DrawFormattedText(wPtr, messageWrong, 'center', 'center', messageColor);
-%         Screen('Flip',wPtr)
+%         Screen('FillOval',pms.wPtr,insideRectColor,insideRect);
+%         Screen('TextSize',pms.wPtr,18);
+%         DrawFormattedText(pms.wPtr, messageWrong, 'center', 'center', messageColor);
+%         Screen('Flip',pms.wPtr)
 %         WaitSecs(pms.feedbackDuration);
 %     end
     
@@ -227,18 +227,15 @@ elseif ~exist('respX','var')
     respY=NaN;
     rt=NaN;
     rtMovement=NaN;
-<<<<<<< HEAD
     rtDecision=NaN;
-=======
-    startResponse=NaN;
->>>>>>> fae74bab82d0d46135517f21f16c2803753dd82d
+
     for ind=1:length(colors)
-        Screen('FillArc',wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
+        Screen('FillArc',pms.wPtr,colors(ind,:),outsideRect,wheelAngles(ind),colorangle);
     end
-    Screen('FillOval',wPtr,insideRectColor,insideRect);
-    Screen('TextSize',wPtr,18);
-    DrawFormattedText(wPtr, messageLate, 'center', 'center', messageColor);
-    Screen('Flip',wPtr)
+    Screen('FillOval',pms.wPtr,insideRectColor,insideRect);
+    Screen('TextSize',pms.wPtr,18);
+    DrawFormattedText(pms.wPtr, messageLate, 'center', 'center', messageColor);
+    Screen('Flip',pms.wPtr)
     WaitSecs(pms.feedbackDuration);
     
 end

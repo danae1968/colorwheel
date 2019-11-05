@@ -12,9 +12,9 @@ choiceSZ=data.sz(randomChoice);
 
 switch data.typeTask(randomChoice)
     case {1 2} %sz1 vs 3
-        if data.choice(randomChoice==1)
+        if data.choice(randomChoice)==1
             choiceSZ=1;
-        elseif data.choice(randomChoice==2)
+        elseif data.choice(randomChoice)==2
             choiceSZ=3;
         end
         

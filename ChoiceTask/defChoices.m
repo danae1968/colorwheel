@@ -3,10 +3,13 @@ function [data]=defChoices(pms)
 
 %% 1) Define trialstructure: 
 if pms.practice == 1
-    pms.nCalTrials = pms.nCalTrials_prac;
+    pms.nCalTrials = pms.nCalTrialsPr;
     pms.Choices = pms.Choices_prac;
+    pms.typeTask=pms.typeTaskPr;
+    pms.easyOffer=pms.easyOfferPr;
+    pms.hardOffer=pms.hardOfferPr;
 end
-%assign value to task condition (1:8, 1:i1-i3, 2: u1-u3, 3: i1-u1, 4: i3-u3, 5: i1-nr, 6: i3-nr, 6: u1-nr 8: u3-nr)
+%assign value to task condition (1:8, 1:i1-i3, 2: u1-u3, 3: i1-u1, 4: i3-u3, 5: i1-nr, 6: i3-nr, 7: u1-nr 8: u3-nr)
 trl_struct = repmat((1:length(pms.typeTask)),pms.Choices/length(pms.typeTask),1); trl_struct=trl_struct(:); % array of task labels for calibration trials: 1:3 IGN; 4:6 UPD
 trl_num=repmat(1:pms.nCalTrials,1,pms.Choices/pms.nCalTrials)';
 adjAmt=repmat(pms.step,1,pms.Choices/pms.nCalTrials)';
@@ -15,7 +18,11 @@ adjAmt=repmat(pms.step,1,pms.Choices/pms.nCalTrials)';
 calTrlAmt = repmat(ones(length(pms.typeTask),1),pms.nCalTrials,1);
 
 % indices for random order of trials
+if pms.practice==1
+    randIndCal=ones(pms.Choices,1);
+else
 randIndCal = randperm(pms.Choices);
+end
 
 trlArray = [trl_struct(randIndCal), calTrlAmt(randIndCal), ones(length(randIndCal),1) trl_num(randIndCal) adjAmt(randIndCal) ];
 % add counter of condition (maximum of 12)
@@ -62,7 +69,7 @@ data.adjAmt = trlArray(:,5); % amount of offer adjustment pursuant to choice on 
 data.sz = nan(pms.Choices,1);
 data.condition = nan(pms.Choices,1);
 data.hardOffer=repmat(pms.hardOffer,length(trlArray),1);
-data.easyOffer=repmat(pms.hardOffer,length(trlArray),1);
+data.easyOffer=repmat(pms.easyOffer,length(trlArray),1);
 data.locationEasy = trlArray(:,6);
 % set anounts to base offer for hard tasks and half the base
 % for easy tasks for first trial in each task-base offer pair

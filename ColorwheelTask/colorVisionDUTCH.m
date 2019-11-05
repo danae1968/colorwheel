@@ -7,8 +7,7 @@ Screen('Preference', 'VisualDebugLevel',0);
 Screen('Preference','SkipSyncTests',1); 
 Screen('Preference', 'SuppressAllWarnings', 1);
 
-[wPtr,rect]=Screen('Openwindow',max(Screen('Screens')));
-
+ [wPtr,rect]=Screen('Openwindow',max(Screen('Screens')),pms.background);
 
 Screen('TextSize',wPtr,24);
 Screen('TextStyle',wPtr,1);
@@ -169,7 +168,13 @@ end
                             randAttach = round(rand*10000);
                             filename = strcat(filename, sprintf('_%d.mat',randAttach));  
                       end
-                       save(fullfile(pms.colordir,filename),'colorTestData')
+                      
+                      if exist (fullfile(pms.colordir,filename),'file')
+    randAttach = round(rand*10000);
+   filename = strcat(filename, sprintf('_%d.mat',randAttach));  
+                      end
+                      
+                      save(fullfile(pms.colordir,filename),'colorTestData')
 
 meanScore=mean([colorTestData.respDif]);
 
@@ -189,5 +194,12 @@ elseif meanScore<=passingScore
   KbWait()
 end
 
-% clear Screen
+  if  pms.runColorwheelPr==0
+    clear Screen
+    Screen('CloseAll');
+    ShowCursor; % display mouse cursor again
+    ListenChar(0); % allow keystrokes to Matlab
+    Priority(0); % return Matlab's priority level to normal
+    Screen('Preference','TextAlphaBlending',0);
+   end
 end
